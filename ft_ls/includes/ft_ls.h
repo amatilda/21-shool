@@ -93,6 +93,7 @@ typedef struct				s_list_file
 	off_t					size_file;
 	nlink_t					st_nlink;
 	dev_t					st_rdev;
+	size_t					len;
 }							t_list_file;
 
 typedef struct				s_list_dir
@@ -156,6 +157,9 @@ typedef struct				s_main
 	char					out_pre[FT_LS_MAX_NAME];
 	char					b[FT_LS_BUFFER_SIZE];
 	char					b_invalid[FT_LS_BUFFER_SIZE_INVALID];
+	size_t					count_list;
+	size_t					max_len;
+	struct winsize			ws;
 }							t_main;
 
 int							ft_ls_list_add_invalid(register t_main *array,
@@ -206,5 +210,9 @@ void						fn_display_info_full(register t_main *array,
 	t_fl_ls_list_file *file, register t_list_file *list, uint_fast8_t b_level);
 void						ft_ls_display_full_add(register t_main *array,
 	t_fl_ls_list_file *file, register t_list_file *list, register char *buff);
+void						ft_ls_display_line(register t_main *array,
+register t_list_file *list, register char *opt);
+void						ft_ls_display_raw(register t_main *array,
+register t_list_file *list, register char *opt);
 
 #endif

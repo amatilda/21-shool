@@ -97,11 +97,17 @@ static int	fn_stub10(register t_main *array, register t_list_file *list,
 static int	fn_stub00(register t_main *array, register t_list_file *list,
 	register char *name)
 {
-	if ((list->name = ft_strdup(name)) == 0)
+	register size_t			tempos;
+
+	tempos = ft_strlen(name);
+	if ((list->name = ft_strndup(name, tempos)) == 0)
 	{
 		free(list);
 		return (0);
 	}
+	array->count_list++;
+	array->max_len = array->max_len < tempos ? tempos : array->max_len;
+	list->len = tempos;
 	list->patch = array->join;
 	list->pw_name = 0;
 	list->gr_name = 0;

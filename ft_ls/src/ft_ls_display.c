@@ -78,41 +78,10 @@ static void		fn_display_finish(register t_main *array,
 	invalid->first = 0;
 }
 
-static void		fn_stub00(register t_main *array, register t_list_file *list,
-	register char litter, register char *opt)
-{
-	register size_t			tempos;
-
-	fn_copy_str_zero(array, list->name);
-	if (opt[FLAG_F] == 0)
-		return ;
-	if ((tempos = list->st_mode_type) == S_IFDIR)
-		litter = '/';
-	else if (tempos == S_IFLNK)
-		litter = '@';
-	else if (tempos == S_IFSOCK)
-		litter = '=';
-	else if (tempos == S_IFIFO)
-		litter = '|';
-	else if (tempos == S_IFCHR)
-		litter = '%';
-	else if (tempos == S_IFBLK)
-		litter = '%';
-	else if (tempos == S_IFREG)
-	{
-		tempos = list->st_mode;
-		tempos = (tempos & S_IXUSR) | (tempos & S_IXGRP) | (tempos & S_IXOTH);
-		litter = tempos != 0 ? '*' : litter;
-	}
-	if (litter != 0)
-		fn_dub_char(array, litter, 1);
-}
-
 void			ft_ls_display(register t_main *array,
 	t_fl_ls_list_invalid *invalid, t_fl_ls_list_file *file,
 	uint_fast8_t b_level)
 {
-	register t_list_file	*tmp;
 	register t_list_file	*list;
 	register char			*opt;
 
@@ -121,20 +90,8 @@ void			ft_ls_display(register t_main *array,
 	if ((opt = array->option)[FLAG_INFO_FULL] != 0)
 		fn_display_info_full(array, file, list, b_level);
 	else
-	{
-		while (list != 0)
-		{
-			fn_stub00(array, list, 0, opt);
-			if (opt[FLAG_DIR_SLECH] != 0 && list->st_mode_type == S_IFDIR)
-				fn_dub_char(array, '/', 1);
-			fn_dub_char(array, '\n', 1);
-			tmp = list;
-			free(list->name);
-			if (list->patch != 0)
-				free(list->patch);
-			list = list->next;
-			free(tmp);
-		}
-	}
+		ft_ls_display_line(array, list, opt);
 	fn_display_finish(array, invalid, file);
+	array->max_len = 0;
+	array->count_list = 0;
 }

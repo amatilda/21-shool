@@ -60,8 +60,10 @@ static int	fn_init(register t_main *array, int argc, register char **argv)
 {
 	t_fl_ls_list_dir		dir;
 
+	ioctl(STDIN_FILENO, TIOCGWINSZ, &array->ws);
 	ft_ls_init_main0(array);
 	dir.first = 0;
+	dir.count = 0;
 	if (argc <= 1)
 	{
 		argc++;
