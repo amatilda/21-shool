@@ -12,16 +12,36 @@
 
 #include "includes/ft_42sh_replase.h"
 
+static size_t	fn_exp_count(register t_replase_in_42sh *in,
+unsigned char **s, unsigned char **out, register unsigned char *e)
+{
+	register size_t			count;
+
+	count = ft_42sh_exp_parsing_count(in, s, out, e);
+	if (*s == *out)
+	{
+		*out = ft_42sh_parsing_sp(*out, e);
+		*s = *out;
+	}
+	return (count);
+}
+
+static size_t	fn_pre_count(unsigned char **s, unsigned char **out,
+register unsigned char *e, unsigned char *lit)
+{
+	*s = ft_42sh_parsing_sp(*s, e);
+	*out = *s;
+	*lit = 0x20;
+	return (0);
+}
+
 size_t			ft_42sh_replase_count(register t_replase_in_42sh *in,
 unsigned char **s, unsigned char **out, register unsigned char *e)
 {
-	register unsigned char	lit;
+	unsigned char			lit;
 	register size_t			count;
 
-	*s = ft_42sh_parsing_sp(*s, e);
-	*out = *s;
-	count = 0;
-	lit = 0x20;
+	count = fn_pre_count(s, out, e, &lit);
 	while ((lit = ft_42sh_parsing_test_next(out, e, 0, lit)) != 0)
 	{
 		if (lit == '\\')
@@ -31,9 +51,13 @@ unsigned char **s, unsigned char **out, register unsigned char *e)
 		else if (lit == '"')
 			count += ft_42sh_replase_quotes_two_count(in, out, e);
 		else if (lit == '$' && (in->b_mode & PARSING_MODE_HRDC_42SH) == 0)
-			count += ft_42sh_exp_parsing_count(in, s, out, e);
-		else if (lit == '~' && (in->b_mode & PARSING_MODE_HRDC_42SH) == 0 && ft_42sh_replase_home_test(*s, *out) != 0)
-			count += ft_42sh_replase_home_count(in->array, out, e);
+		{
+			count += fn_exp_count(in, s, out, e);
+			if ((*out)[-1] == 0x20)
+				break ;
+		}
+		else if (lit == '~' && ft_42sh_replase_add_tilda(in, *s, *out, e) != 0)
+			count += ft_42sh_replase_home_count(in->array, out);
 		else
 			count++;
 	}
@@ -41,14 +65,23 @@ unsigned char **s, unsigned char **out, register unsigned char *e)
 	return (count);
 }
 
+static void		*fn_pre(register t_replase_in_42sh *in,
+unsigned char **b, register unsigned char *e, size_t *exps_loop)
+{
+	if ((in->array->b_location & LOCATION_NOT_SET_42SH) == 0 &&
+	(in->b_mode & PARSING_MODE_HRDC_42SH) == 0)
+		*exps_loop = ((t_jobs_42sh *)in->array->pr.jb.last)->exps_loop++;
+	*b = ft_42sh_parsing_sp(*b, e);
+	return (*b);
+}
+
 void			ft_42sh_replase(register t_replase_in_42sh *in,
-register unsigned char *dest, unsigned char *b, register unsigned char *e)
+unsigned char *dest, unsigned char *b, register unsigned char *e)
 {
 	register unsigned char		lit;
-	register unsigned char		*start;
+	t_replase_in				st;
 
-	b = ft_42sh_parsing_sp(b, e);
-	start = b;
+	st.s = fn_pre(in, &b, e, &st.exps_loop);
 	lit = 0x20;
 	while ((lit = ft_42sh_parsing_test_next(&b, e, 0, lit)) != 0)
 	{
@@ -59,10 +92,15 @@ register unsigned char *dest, unsigned char *b, register unsigned char *e)
 		else if (lit == '"')
 			dest = ft_42sh_replase_quotes_two(in, dest, &b, e);
 		else if (lit == '$' && (in->b_mode & PARSING_MODE_HRDC_42SH) == 0)
+		{
 			dest = ft_42sh_exp_parsing(in, dest, &b, e);
-		else if (lit == '~' && (in->b_mode & PARSING_MODE_HRDC_42SH) == 0 && ft_42sh_replase_home_test(start, b) != 0)
-			dest = ft_42sh_replase_home(in->array, dest, &b, e);
+			if (b[-1] == 0x20)
+				break ;
+		}
+		else if (lit == '~' && ft_42sh_replase_add_tilda(in, st.s, b, e) != 0)
+			dest = ft_42sh_replase_home(in->array, dest, &b);
 		else
 			dest++[0] = lit;
 	}
+	return (ft_42sh_replase_add_finish(in, st.exps_loop));
 }

@@ -19,16 +19,43 @@ void		ft_42sh_auto_free_list(register t_all_cmd_42sh *list)
 	ft_free(list);
 }
 
-void		ft_42sh_auto_free_all_cmd(register t_main_42sh *array)
+static void	fn_free_auto(register t_auto_42sh *lp_auto)
 {
 	register t_all_cmd_42sh		**spl;
 	register t_all_cmd_42sh		**tmp;
 	register t_all_cmd_42sh		*list;
 
-	spl = array->lp_auto->spl_all_cmd;
+	if (lp_auto->all_cmd.first == 0)
+	{
+		if ((spl = lp_auto->spl_all_cmd) != 0)
+		{
+			lp_auto->spl_all_cmd = 0;
+			ft_free(spl);
+		}
+		return ;
+	}
+	spl = lp_auto->spl_all_cmd;
 	tmp = spl;
 	while ((list = spl++[0]) != 0)
 		ft_42sh_auto_free_list(list);
 	ft_free(tmp);
-	array->lp_auto->all_cmd.first = 0;
+	lp_auto->all_cmd.first = 0;
+	lp_auto->spl_all_cmd = 0;
+}
+
+void		ft_42sh_auto_free_all_cmd(register t_main_42sh *array)
+{
+	fn_free_auto(array->lp_auto);
+}
+
+void		ft_42sh_auto_free_all_cmd_full(register t_main_42sh *array)
+{
+	register t_auto_42sh		*lp_auto;
+
+	lp_auto = &array->auto_;
+	fn_free_auto(lp_auto);
+	lp_auto = &array->auto_env;
+	fn_free_auto(lp_auto);
+	lp_auto = &array->auto_file;
+	fn_free_auto(lp_auto);
 }

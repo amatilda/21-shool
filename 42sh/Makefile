@@ -5,20 +5,22 @@ NAME = 42sh
 #PWD = $(shell pwd)
 
 #Списки включаемых файлов
-include amatilda.mak pguitar.mak
-LIST = $(AMATILDA) $(PGUITAR)
+include amatilda.mak pguitar.mak mbrella.mak
+LIST = $(AMATILDA) $(PGUITAR) $(MBRELLA)
 
 # Все деректории в которых будим искать си файлы для компиляции
 DIRS		= srcs/
+
 # Получаем Список обькектных файлов которые должны быть или иначе создаем
 SOURCE		= $(addprefix $(DIRS), $(LIST))
 OBJ			= $(patsubst %.c,%.o,$(SOURCE))
 D_FILE		= $(patsubst %.c,%.d,$(SOURCE))
 
 # Список дериктории для библиотек
-LIB_DIRS        = libft/
+LIB_DIRS        = libft/ #conf_reader/
+
 # Список файлов с биоблитек которые подключаем при компиляции
-LIB 	   		= libft/libft.a
+LIB 	   		= libft/libft.a  #conf_reader/conf_reader.a
 
 # Для удобства и универсальности что бы обработать биоблитеки с помощью ихнего MakeFile
 LIB_CMD_ALL     = $(addsuffix .all,$(LIB_DIRS))
@@ -28,15 +30,16 @@ LIB_CMD_CLEAN   = $(addsuffix .clean,$(LIB_DIRS))
 LIB_CMD_FCLEAN  = $(addsuffix .fclean,$(LIB_DIRS))
 
 # Список папок биоблитек с которых берем хедары
-INCLUDES		= includes/
-INCLUDES_LIBFT	= $(addsuffix includes/,$(LIB_DIRS))
+INCLUDES		= -I includes/ 
+INCLUDES_LIBFT	= $(addprefix -I ,$(addsuffix includes/,$(LIB_DIRS)))
 
 # Флаги компиляции по умолчанию
 override OPFLAGS ?= -O2
 override FLAGS ?= -Wall -Wextra -Werror
 
 # Самое первое правило которое действует по умолчанию
-all: $(LIB_CMD_ALL) $(OBJ) $(NAME)
+all:
+	make  $(NAME)
 
 # Команда которая компирует отладочную версию
 debug: $(LIB_CMD_DEBUG)
@@ -59,11 +62,14 @@ re: fclean all
 
 # Правило которое если нету обьктного файла соответсвуещего сишному файлу или сищный файл изменился тогда скомпилируем обьктный файл
 %.o: %.c
-	gcc $(FLAGS) $(OPFLAGS) -c $< -o $@ -I$(INCLUDES_LIBFT) -I$(INCLUDES) -MD
+	gcc $(FLAGS) $(OPFLAGS) -c $< -o $@ $(INCLUDES_LIBFT) $(INCLUDES) -MD
 
 # Если обьктынй файл или биоблитека изменилась занова перекомпилируем выходной файл
 $(NAME): $(OBJ) $(LIB)
 	gcc $(FLAGS) $(OPFLAGS) $(OBJ) -o $(basename $(NAME)) $(LIB)
+
+# Если в  makefile  юзаеться make name то тут проверяем изменения в биоблетеках всех
+$(LIB): $(LIB_CMD_ALL)
 
 # Правило которое соответсвует $(LIB_CMD_ALL)
 %.all:
@@ -83,7 +89,7 @@ $(NAME): $(OBJ) $(LIB)
 	rm -f $(addsuffix *.a,$*)
 
 # При компеляции обьктых файлов создаються файлы соответсвий - тоесть что требеуться для компеляции данного сишного файла в обьктынй и при измененении одного из них заного скомпилируеться
-include $(wildcard $(D_FILE))
+-include $(D_FILE)
 
 # Список используемых команд в MakeFile что бы не спутало с файлами в каталоге
 .PHONY: all clean fclean re debug test

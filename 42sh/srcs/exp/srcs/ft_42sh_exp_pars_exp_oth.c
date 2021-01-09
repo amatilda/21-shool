@@ -82,8 +82,9 @@ register unsigned char *dest, unsigned char **src, register unsigned char *end)
 	return (dest);
 }
 
-unsigned char			*ft_42sh_exp_pars_exp_oth(register t_replase_in_42sh *in,
-register unsigned char *dest, unsigned char **src, register unsigned char *end)
+unsigned char			*ft_42sh_exp_pars_exp_oth(register
+t_replase_in_42sh *in, register unsigned char *dest,
+unsigned char **src, register unsigned char *end)
 {
 	unsigned char					*b;
 	register unsigned char			litter;

@@ -19,12 +19,12 @@ register unsigned char *b, register size_t count)
 	register unsigned char			litter;
 
 	jobs = array->pr.jb.last;
-	if (count > 2 || ((litter = b[0] - 0x30) > PIPE_MAX_STANDART_FD_42SH &&
+	if (count > 2 || ((litter = b[0] - 0x30) > FD_MAX_STANDART_42SH &&
 	((jobs->b_fd_left | jobs->b_fd_right) & (1 << litter)) == 0) ||
 	((jobs->b_flag_close) & (1 << litter)) != 0)
 	{
 		ft_42sh_jobs_set_err_n(array, MSG_PIPE_BAD_FD_42SH, b, count);
-		return (0xFF);
+		return (PARSING_FALTURE_42SH);
 	}
 	return (litter);
 }
@@ -47,7 +47,7 @@ register unsigned char *end)
 	if (b == end)
 		b--;
 	count = end - b;
-	if ((litter = fn_test_fd(array, b, count)) == 0xFF)
+	if ((litter = fn_test_fd(array, b, count)) == PARSING_FALTURE_42SH)
 		return (0);
 	pipe->fd_2 = litter;
 	return (1);

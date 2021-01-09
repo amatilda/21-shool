@@ -32,7 +32,7 @@ static void		fn_fail(register t_main_42sh *array)
 static size_t	fn_count(unsigned char **out,
 register unsigned char litter)
 {
-	register size_t			count;
+	register size_t					count;
 	register unsigned char			*b;
 
 	b = *out;

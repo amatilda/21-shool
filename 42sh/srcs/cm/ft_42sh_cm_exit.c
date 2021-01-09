@@ -12,38 +12,10 @@
 
 #include "ft_42sh.h"
 
-static void		fn_alias_free(register t_main_42sh *array)
-{
-	t_pguitar_alias_42sh *list;
-	t_pguitar_alias_42sh *list_next;
-
-	list = array->pguitar.list;
-	if (array->pguitar.f_modif.home)
-		free(array->pguitar.f_modif.home);
-	while (list)
-	{
-		list_next = list->next;
-		free(list);
-		list = NULL;
-		list = list_next;
-	}
-}
-
-static void		fn_free(register t_main_42sh *array)
-{
-	ft_42sh_auto_free_all_cmd(array);
-	if (array->lp_spl_path != 0)
-		ft_strsplit_free(array->lp_spl_path);
-	ft_free(array->pwd.path.buff);
-	ft_free(array->pwd.prev_path.buff);
-	ft_42sh_list_fun(&array->env.root, ft_free);
-	ft_42sh_jobs_free_all(array);
-}
-
 void			ft_42sh_cm_exit_fun(register t_main_42sh *array,
 register size_t exit_code)
 {
-	fn_free(array);
+	ft_42sh_free_exit(array);
 	exit((unsigned char)exit_code);
 }
 
@@ -53,18 +25,18 @@ register char **lp_arg)
 	register unsigned char		*b;
 	register unsigned char		litter;
 
-	if (lp_arg == 0)
+	if (lp_arg == 0 || (b = (void *)lp_arg[0]) == 0)
 		return (1);
-	if ((b = (void *)lp_arg[0]) != 0 && lp_arg[1] != 0)
+	if (lp_arg[1] != 0)
 	{
-		ft_42sh_dsp_err_msg(array, MSG_EXIT_TOO_42SH);
+		ft_42sh_dsp_err_msg(array, WAR_42SH""MSG_EXIT_TOO_TXT_42SH""PRTF_RESET);
 		return (0);
 	}
 	while ((litter = b[0]) != 0 && litter >= 0x30 && litter <= 0x39)
 		b++;
 	if (litter != 0)
 	{
-		ft_42sh_dsp_err_msg(array, MSG_EXIT_NUM_42SH);
+		ft_42sh_dsp_err_msg(array, WAR_42SH""MSG_EXIT_NUM_TXT_42SH""PRTF_RESET);
 		return (0);
 	}
 	return (1);
@@ -86,9 +58,11 @@ register char **lp_arg)
 		tempos = E_CODE_42SH;
 	else
 		tempos = (unsigned char)ft_atoi(lp_arg[0]);
-	fn_free(array);
-	ioctl(array->fd, TIOCSETA, &array->tty);
-	ft_42sh_alias_file(array);
-	fn_alias_free(array);
+	if ((array->b_location & LOCATION_SCRIPT_42SH) == 0)
+		ft_42sh_alias_file(array);
+	if ((array->b_location & LOCATION_STANDART_42SH) != 0)
+		write(array->out.fd, "\n", 1);
+	ft_42sh_stub_ioctl(array, TIOCSETA, &array->tty);
+	ft_42sh_free_exit(array);
 	exit(tempos);
 }

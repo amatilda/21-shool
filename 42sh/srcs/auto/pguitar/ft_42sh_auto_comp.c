@@ -18,10 +18,10 @@ register t_in_42sh *list)
 	register char *str;
 	register char *end_str;
 
-	str = ft_strjoin(array->pguitar.comp.dirr + array->pguitar.comp.del,
-		array->pguitar.comp.str);
-	end_str = str + array->pguitar.comp.count_str +
-		array->pguitar.comp.count_dirr - array->pguitar.comp.del;
+	str = ft_42sh_str_shield((void*)array->pguitar.comp.dirr
+		+ array->pguitar.comp.del, (void*)array->pguitar.comp.dirr
+		+ array->pguitar.comp.count_dirr, SHIELD_EXTERNALLY, 0);
+	end_str = (str + ft_strlen(str));
 	ft_42sh_str_delete(array, list, array->pguitar.comp.cur,
 		array->pguitar.comp.count_cur_litter);
 	ft_42sh_str_add(array, str, end_str, 0);
@@ -32,30 +32,30 @@ register t_in_42sh *list)
 static void	ft_42sh_auto_comp_word(register t_main_42sh *array,
 register t_in_42sh *list)
 {
-	size_t			i;
 	register char	b;
 	register char	*str;
 	register char	*end_str;
 	t_all_cmd_42sh	**spl;
 
-	str = NULL;
 	end_str = NULL;
 	spl = array->auto_file.spl_all_cmd;
+	str = ft_42sh_str_shield((void*)array->pguitar.comp.str, (void*)array->
+	pguitar.comp.str + array->pguitar.comp.count_str, SHIELD_EXTERNALLY, 0);
+	array->pguitar.comp.count_str = ft_strlen(str);
+	free(str);
+	str = array->pguitar.comp.dirr + array->pguitar.comp.del;
+	end_str = ft_42sh_str_shield((void*)str, (void*)str +
+		ft_strlen(str), SHIELD_EXTERNALLY, 0);
 	b = *((*spl)->std.lp_key + array->pguitar.comp.count_str);
 	*((*spl)->std.lp_key + array->pguitar.comp.count_str) = '\0';
-	str = ft_strjoin(array->pguitar.comp.dirr + array->pguitar.comp.del,
-		(*spl)->std.lp_key);
-	end_str = str + array->pguitar.comp.count_str +
-		array->pguitar.comp.count_dirr - array->pguitar.comp.del;
-	i = list->lp_current - list->lp_b - array->pguitar.comp.count_cur;
+	str = ft_strjoin(end_str, (*spl)->std.lp_key);
+	free(end_str);
 	ft_42sh_str_delete(array, list, array->pguitar.comp.cur,
 		array->pguitar.comp.count_cur_litter);
-	ft_42sh_str_add(array, str, end_str, 0);
-	array->pguitar.comp.cur = (list->lp_b + i + array->pguitar.comp.count_dirr -
-		array->pguitar.comp.del);
+	ft_42sh_str_add(array, str, (str + ft_strlen(str)), 0);
 	*((*spl)->std.lp_key + array->pguitar.comp.count_str) = b;
-	ft_42sh_auto_cmd(array, list, (void*)(array->pguitar.comp.cur),
-		array->pguitar.comp.count_str);
+	ft_42sh_auto_cmd(array, list, (void*)list->lp_current
+		- array->pguitar.comp.count_str, array->pguitar.comp.count_str);
 	free(str);
 }
 
@@ -101,7 +101,7 @@ register t_in_42sh *list, register char *start, register char *end)
 	}
 	if (array->pguitar.comp.count_d > 0 || array->pguitar.comp.figure)
 		return (ft_42sh_auto_comp_env(array, list));
-	else if (!ft_42sh_auto_comp_pars_dir(array))
+	else if (!ft_42sh_auto_comp_pars_dir(array, list))
 		return (ft_42sh_auto_comp_free_struct(array));
 	if ((*(array->pguitar.comp.str) != '\0' && array->auto_file.count_all != 0)
 		|| array->auto_file.count_all == 1)
@@ -134,6 +134,9 @@ register t_in_42sh *list, register char *start, register char *end)
 	array->pguitar.comp.count_d = 0;
 	array->pguitar.comp.figure = 0;
 	array->pguitar.comp.caret = 0;
+	array->pguitar.comp.dir_dol = 0;
+	array->pguitar.comp.read_dir = NULL;
+	array->pguitar.comp.count_read = 0;
 	array->lp_auto = &array->auto_file;
 	ft_42sh_auto_comp(array, list, start, end);
 }

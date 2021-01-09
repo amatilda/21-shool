@@ -106,15 +106,15 @@ unsigned char **src, register unsigned char *e)
 	register unsigned char			*tmp;
 	register unsigned char			litter;
 
+	if ((b = *src) + 2 < e && b[0] == '(' && b[1] == '(')
+		if (ft_42sh_calc_test(array, src, e) == 0)
+			return (0);
 	if ((b = *src) == e || b++[0] != '{')
 		return (1);
 	if ((litter = b[0]) == '#')
 		b++;
 	tmp = b;
-	if (b < e && b[0] == '?')
-		b++;
-	else
-		b = ft_42sh_exp_name(b, e);
+	b = ft_42sh_exp_name_special(b, e);
 	if (tmp == b)
 		return (f(array, b));
 	if (b[0] == '}')

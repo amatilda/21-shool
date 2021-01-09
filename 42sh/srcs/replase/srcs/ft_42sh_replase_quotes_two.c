@@ -44,10 +44,10 @@ register unsigned char *e)
 	count = 0;
 	while ((lit = b++[0]) != '"')
 	{
-		if (lit == '\\') 
+		if (lit == '\\')
 			count += fn_slesh_count(&b);
 		else if (lit == '\n')
-			count += (in->b_mode & PARSING_MODE_CMD_42SH) != 0 ? 1: 0;
+			count += (in->b_mode & PARSING_MODE_CMD_42SH) != 0 ? 1 : 0;
 		else if (lit == '$' && (in->b_mode & PARSING_MODE_HRDC_42SH) == 0)
 			count += ft_42sh_exp_parsing_count(in, &start, &b, e);
 		else
@@ -69,10 +69,10 @@ register unsigned char **src)
 	else if (lit == ' ' && b[0] == '\n')
 		b++;
 	else
-		{
-			dest++[0] = '\\';
-			dest++[0] = lit;
-		}
+	{
+		dest++[0] = '\\';
+		dest++[0] = lit;
+	}
 	*src = b;
 	return (dest);
 }
@@ -87,7 +87,7 @@ register unsigned char *e)
 	b = *src;
 	while ((lit = b++[0]) != '"')
 	{
-		if (lit == '\\') 
+		if (lit == '\\')
 			dest = fn_slesh(dest, &b);
 		else if (lit == '\n')
 		{

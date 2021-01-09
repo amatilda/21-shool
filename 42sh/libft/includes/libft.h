@@ -19,8 +19,6 @@
 # include <stddef.h>
 # include <time.h>
 
-# define LEN_(len)(sizeof(len) - 1)
-
 # define PRTF_RESET			"\x1b[0m"
 
 # define PRTF_BOLT			"\x1b[1m"
@@ -67,15 +65,15 @@ void					ft_free(register void *buff);
 
 void					ft_crc32_tabl_mirror(register uint32_t *lp,
 uint_fast8_t count_table, register uint32_t polinom);
-uint32_t				ft_crc32_mirror_one(register uint32_t *lp, register void *src,
-size_t count, register uint32_t crc32);
+uint32_t				ft_crc32_mirror_one(register uint32_t *lp,
+register void *src, size_t count, register uint32_t crc32);
 
 size_t					ft_unicode_alpha(register uint32_t unicode);
 uintmax_t				ft_utf8_decode(register const unsigned char *b);
 size_t					ft_strlen_utf8(register const char *s);
 size_t					ft_strlen_utf8_n(register const char *s,
 register const char *e);
-size_t					ft_strlen_utf8_litter(register uint_fast8_t litter);
+size_t					ft_strlen_utf8_litter(register void *s);
 
 void					ft_write_buffer_char(register t_write_buff *array,
 register const char litter, register size_t n);
@@ -89,6 +87,8 @@ char					**ft_strsplit(register char const *s, register char c);
 void					ft_strsplit_free(register char **array);
 
 char					*ft_strjoin(char const *s1, char const *s2);
+void					*ft_strnjoin(register const void *s1,
+register size_t n1, register const void *s2, register size_t n2);
 
 int						ft_strcmp(register char *s1, register char *s2);
 int						ft_strncmp(register void *s1, register void *s2,

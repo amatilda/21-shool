@@ -52,13 +52,18 @@ AMATILDA		=	main.c\
 				dq/srcs/ft_42sh_dq_test_end.c\
 				dq/srcs/ft_42sh_dq_test_err.c\
 				dq/srcs/ft_42sh_dq_test_hrdc_cmp.c\
+				dq/srcs/ft_42sh_dq_test_hrdc_find.c\
+				glb/ft_42sh_glb.c\
+				glb/ft_42sh_glb_args_parser.c\
+				glb/ft_42sh_glb_auto.c\
+				glb/srcs/ft_42sh_glb_list.c\
+				exp/ft_42sh_exp_corection.c\
 				exp/ft_42sh_exp_split_env.c\
 				exp/ft_42sh_exp_start.c\
 				exp/ft_42sh_exp_add.c\
 				exp/ft_42sh_exp_del.c\
 				exp/ft_42sh_exp_parsing.c\
 				exp/ft_42sh_exp_parsing_count.c\
-				exp/ft_42sh_exp_test_name.c\
 				exp/ft_42sh_exp_name.c\
 				exp/ft_42sh_exp_parsing_value.c\
 				exp/srcs/ft_42sh_exp_standart.c\
@@ -80,17 +85,19 @@ AMATILDA		=	main.c\
 				exp/srcs/ft_42sh_exp_pars_exp_prefix.c\
 				exp/srcs/ft_42sh_exp_pars_exp_skip.c\
 				exp/srcs/ft_42sh_exp_pars_exp_set.c\
+				exp/srcs/ft_42sh_exp_pars_exp_prefix_add.c\
+				exp/srcs/ft_42sh_exp_pars_exp_sufix_add.c\
 				exp/ft_42sh_exp_shield.c\
 				exe/ft_42sh_exe.c\
 				exe/ft_42sh_exe_wait.c\
-				exe/srcs/ft_42sh_exe_wait_script.c\
+				exe/srcs/ft_42sh_exe_wait_finish.c\
+				exe/srcs/ft_42sh_exe_fork.c\
 				exe/srcs/ft_42sh_exe_while.c\
 				exe/srcs/ft_42sh_exe_fun.c\
 				exe/srcs/ft_42sh_exe_fun_run.c\
 				exe/srcs/ft_42sh_exe_grup.c\
 				exe/srcs/ft_42sh_exe_err.c\
 				exe/srcs/ft_42sh_exe_set.c\
-				glob/ft_42sh_glob.c\
 				list/ft_42sh_list_sort_paste.c\
 				jobs/ft_42sh_jobs_list_create_cmd.c\
 				jobs/ft_42sh_jobs_list.c\
@@ -103,16 +110,22 @@ AMATILDA		=	main.c\
 				jobs/ft_42sh_jobs_list_set_type.c\
 				jobs/ft_42sh_jobs_set_err.c\
 				jobs/ft_42sh_jobs_exit.c\
+				jobs/srcs/ft_42sh_jobs_free.c\
 				jobs/srcs/ft_42sh_jobs_list_create_id.c\
 				jobs/srcs/ft_42sh_jobs_msg_signal.c\
 				jobs/srcs/ft_42sh_jobs_msg_exit.c\
 				jobs/srcs/ft_42sh_jobs_msg_number.c\
 				init/ft_42sh_init.c\
-				init/ft_42sh_init_script.c\
 				init/srcs/ft_42sh_init_event.c\
 				init/srcs/ft_42sh_init_variable.c\
+				init/srcs/ft_42sh_init_variable_fun.c\
 				init/srcs/ft_42sh_init_terminal.c\
 				init/srcs/ft_42sh_init_fd.c\
+				init/srcs/ft_42sh_init_script_env.c\
+				init/srcs/ft_42sh_init_test.c\
+				init/srcs/ft_42sh_init_test_add.c\
+				init/srcs/ft_42sh_init_test_while.c\
+				init/srcs/ft_42sh_init_test_while_signal.c\
 				list/ft_42sh_list_cut.c\
 				list/ft_42sh_list_fun.c\
 				list/ft_42sh_list_find.c\
@@ -135,6 +148,7 @@ AMATILDA		=	main.c\
 				cm/ft_42sh_cm_jobs.c\
 				cm/ft_42sh_cm_hash.c\
 				cm/ft_42sh_cm_test.c\
+				cm/srcs/ft_42sh_cm_type_msg.c\
 				cm/srcs/ft_42sh_cm_echo_number.c\
 				cm/srcs/ft_42sh_cm_jobs_number.c\
 				cm/srcs/ft_42sh_cm_jobs_str.c\
@@ -147,6 +161,9 @@ AMATILDA		=	main.c\
 				cm/srcs/ft_42sh_cm_test_three_add.c\
 				cm/srcs/ft_42sh_cm_cd_set.c\
 				cm/srcs/ft_42sh_cm_export_set.c\
+				cm/srcs/ft_42sh_cm_bg_process.c\
+				cm/srcs/ft_42sh_cm_cd_process.c\
+				cm/srcs/ft_42sh_cm_hash_reset.c\
 				pattern/ft_42sh_pattern.c\
 				pattern/srcs/ft_42sh_pattern_star.c\
 				pattern/srcs/ft_42sh_pattern_slesh.c\
@@ -163,6 +180,7 @@ AMATILDA		=	main.c\
 				parsing/ft_42sh_parsing_end.c\
 				parsing/ft_42sh_parsing_sp.c\
 				parsing/ft_42sh_parsing_litter.c\
+				parsing/srcs/ft_42sh_parsing_exp_set_next.c\
 				parsing/srcs/ft_42sh_parsing_while.c\
 				parsing/srcs/ft_42sh_parsing_while_availability.c\
 				parsing/srcs/ft_42sh_parsing_while_logic.c\
@@ -170,13 +188,19 @@ AMATILDA		=	main.c\
 				parsing/srcs/ft_42sh_parsing_while_error.c\
 				path/ft_42sh_path_join.c\
 				path/ft_42sh_path_canon.c\
+				path/ft_42sh_path_logins.c\
+				pipe/srcs/ft_42sh_pipe_left_hrdc.c\
+				path/srcs/ft_42sh_path_logins_list.c\
 				pipe/srcs/ft_42sh_pipe_close_fd.c\
+				pipe/srcs/ft_42sh_pipe_pre_heredoc_set.c\
 				pipe/srcs/ft_42sh_pipe_pre_heredoc.c\
 				pipe/srcs/ft_42sh_pipe_pre_number.c\
 				pipe/srcs/ft_42sh_pipe_pre_set.c\
+				pipe/srcs/ft_42sh_pipe_pre_set_add.c\
 				pipe/srcs/ft_42sh_pipe_pre_set_open.c\
 				pipe/srcs/ft_42sh_pipe_pre_close.c\
 				pipe/srcs/ft_42sh_pipe_pre_and.c\
+				pipe/srcs/ft_42sh_pipe_pre_and_right.c\
 				pipe/srcs/ft_42sh_pipe_pre_pipe.c\
 				pipe/srcs/ft_42sh_pipe_pre_finish.c\
 				pipe/ft_42sh_pipe_pre.c\
@@ -185,6 +209,7 @@ AMATILDA		=	main.c\
 				pipe/ft_42sh_pipe_left.c\
 				pipe/ft_42sh_pipe_right.c\
 				pipe/ft_42sh_pipe_test_fd.c\
+				pipe/ft_42sh_pipe_find.c\
 				key/ft_42sh_key_clear.c\
 				key/ft_42sh_key_eof.c\
 				key/ft_42sh_key_move_caret.c\
@@ -210,7 +235,7 @@ AMATILDA		=	main.c\
 				signal/ft_42sh_exit.c\
 				signal/srcs/ft_42sh_signal_child.c\
 				signal/srcs/ft_42sh_signal_child_msg.c\
-				signal/srcs/ft_42sh_signal_term.c\
+				signal/srcs/ft_42sh_signal_child_msg_start.c\
 				signal/srcs/ft_42sh_signal_winch.c\
 				signal/srcs/ft_42sh_signal_child_pipe.c\
 				str/ft_42sh_str_full_home_end.c\
@@ -228,7 +253,15 @@ AMATILDA		=	main.c\
 				replase/srcs/ft_42sh_replase_slesh.c\
 				replase/srcs/ft_42sh_replase_quotes_one.c\
 				replase/srcs/ft_42sh_replase_quotes_two.c\
+				replase/srcs/ft_42sh_replase_hrdc_add.c\
+				replase/srcs/ft_42sh_replase_add.c\
+				task/ft_42sh_task.c\
+				calc/ft_42sh_calc.c\
+				calc/ft_42sh_calc_test.c\
+				calc/ft_42sh_calc_env.c\
+				calc/ft_42sh_calc_other.c\
 				ft_42sh_msg_change.c\
 				ft_42sh_read.c\
 				ft_42sh_spl_find.c\
-				ft_42sh_stop.c
+				ft_42sh_free.c\
+				ft_42sh_stub.c

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_42sh.h"
+#include "includes/ft_42sh_path.h"
 
 char			*ft_42sh_path_join(register char const *s1,
 register char const *s2)
@@ -38,7 +38,7 @@ register char const *s2)
 	return ((char *)size);
 }
 
-void		ft_42sh_path_view(register t_main_42sh *array,
+void			ft_42sh_path_view(register t_main_42sh *array,
 register unsigned char *b, register unsigned char *e)
 {
 	register unsigned char			*tmp;

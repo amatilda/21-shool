@@ -39,12 +39,12 @@ register size_t len, register t_main_42sh *array)
 		array->pguitar.comp.open_dirr = NULL;
 	}
 	if (!(str = (char *)malloc(sizeof(char) * len + 1)))
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	while (++i < len)
 	{
-		if (dir[i] != '\\')
+		if (dir[i] != '\\' || (dir[i] == '\\' && (dir[i + 1] == 'n')))
 			str[j++] = dir[i];
-		else if (dir[i] == '\\' && (dir[i + 1] == '\\'))
+		else if (dir[i] == '\\' && dir[i + 1] == '\\')
 			str[j++] = dir[i++];
 	}
 	str[j] = '\0';
@@ -63,7 +63,7 @@ char *tmp, size_t i)
 	str = array->pguitar.comp.str;
 	if (!(tmp = (char *)malloc(sizeof(char) *
 		(array->pguitar.comp.count_dirr + i + 2))))
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	while (++j < array->pguitar.comp.count_dirr && i--)
 		*(tmp + j) = *(array->pguitar.comp.dirr + j);
 	while (k++ < i)
@@ -82,22 +82,22 @@ char *tmp, size_t i)
 }
 
 static size_t	ft_42sh_auto_comp_check_dir_init(register t_main_42sh *array,
-register char **tmp, register char **str, register size_t *len)
+register char **str, register size_t *len, register t_in_42sh *list)
 {
-	*tmp = NULL;
+	ft_42sh_auto_comp_exp_str(array, array->pguitar.comp.str, list);
 	*str = array->pguitar.comp.str;
 	*len = array->pguitar.comp.count_str;
 	return (0);
 }
 
-size_t			ft_42sh_auto_comp_check_dir(register t_main_42sh *array)
+size_t			ft_42sh_auto_comp_check_dir(register t_main_42sh *array,
+register t_in_42sh *list, char *tmp)
 {
 	size_t	i;
 	size_t	len;
-	char	*tmp;
 	char	*str;
 
-	i = ft_42sh_auto_comp_check_dir_init(array, &tmp, &str, &len);
+	i = ft_42sh_auto_comp_check_dir_init(array, &str, &len, list);
 	while (*str && len != 0)
 	{
 		if (ft_42sh_auto_comp_is_dir(array->pguitar.comp.dirr,

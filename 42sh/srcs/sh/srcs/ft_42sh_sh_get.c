@@ -25,10 +25,13 @@ register unsigned char *lp_sh, register size_t count, register int fd)
 	tmp = lp_sh;
 	while (tmp < lp_sh_e && tmp[0] != '\n')
 		tmp++;
-	if (tmp == lp_sh_e || count < 3 || (lp_sh[0] != '#' && lp_sh[1] != '!'))
+	if (count < 2 || lp_sh[0] != '#' || lp_sh[1] != '!')
+		return (1);
+	if (tmp == lp_sh_e || count < 3)
 		ft_42sh_sh_exit(ft_42sh_sh_exit_zero_crit(array,
 		MSG_SH_UNKNOWN_42SH), STATUS_FALTURE_42SH);
-	if (ft_42sh_pattern(lp_sh, tmp, (void *)MSG_SH_TEST_TYPE_42SH, (void *)(MSG_SH_TEST_TYPE_42SH + LEN_(MSG_SH_TEST_TYPE_42SH))) != 0)
+	if (ft_42sh_pattern(lp_sh, tmp, (void *)MSG_SH_TEST_TYPE_42SH,
+	(void *)(MSG_SH_TEST_TYPE_42SH + sizeof(MSG_SH_TEST_TYPE_42SH) - 1)) != 0)
 		return (1);
 	tmp[0] = 0;
 	return (0);
@@ -52,7 +55,7 @@ register unsigned char *bin)
 }
 
 t_in_42sh		*ft_42sh_sh_get(register t_main_42sh *array,
-register char **env_spl, register unsigned char *path)
+register char **env_spl, register unsigned char *path, register char **lp_arg)
 {
 	struct stat						st;
 	register int					fd;
@@ -77,6 +80,6 @@ register char **env_spl, register unsigned char *path)
 	if (fn_test_type(array, out, count, fd) == 0)
 		fn_run(array, env_spl, path, out + 2);
 	count = ((count << 1) + BUFFER_READ_42SH) & -BUFFER_READ_42SH;
-	ft_42sh_init_script(array, env_spl);
-	return ((array->in.in_first = ft_42sh_list_in_create(array, count)));
+	ft_42sh_init_script(array, env_spl, lp_arg);
+	return (ft_42sh_list_in_create(array, count));
 }

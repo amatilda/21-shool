@@ -16,8 +16,8 @@ static void			fn_default(void)
 {
 	register int				fd;
 
-	fd = PIPE_MAX_SUPPORT_FD_42SH;
-	while (fd > PIPE_MAX_STANDART_FD_42SH)
+	fd = FD_MAX_SUPPORT_42SH;
+	while (fd > FD_MAX_STANDART_42SH)
 		close(fd--);
 }
 

@@ -49,11 +49,11 @@ register t_pguitar_alias_42sh *list)
 	else if (list->v_quote)
 	{
 		ft_write_buffer_str_zero(&array->out, "'");
-		ft_write_buffer_str_zero(&array->out, list->value);
+		ft_42sh_alias_pars_dsp_write_v(array, list);
 		ft_write_buffer_str_zero(&array->out, "'");
 	}
 	else
-		ft_write_buffer_str_zero(&array->out, list->value);
+		ft_42sh_alias_pars_dsp_write_v(array, list);
 	ft_write_buffer_str_zero(&array->out, "\n");
 	return (1);
 }

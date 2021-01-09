@@ -17,8 +17,7 @@ register unsigned char *b, register unsigned char *e)
 {
 	if ((array->b_location & LOCATION_SCRIPT_42SH) == 0)
 		return (b);
-	b = ft_42sh_parsing_sp(b, e);
-	while (b < e && b[0] == '#')
+	while ((b = ft_42sh_parsing_sp(b, e)) < e && b[0] == '#')
 	{
 		while (b < e && b[0] != '\n')
 			b++[0] = ' ';

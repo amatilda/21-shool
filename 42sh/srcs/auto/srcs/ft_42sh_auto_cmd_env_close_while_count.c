@@ -12,7 +12,6 @@
 
 #include "../includes/ft_42sh_auto.h"
 
-
 static void		*fn_slesh(unsigned char *b, size_t *n)
 {
 	*n = *n + 2;

@@ -19,7 +19,7 @@ register t_pguitar_alias_42sh *list)
 	register t_all_cmd_42sh		*auto_list;
 
 	spl = (t_all_cmd_42sh **)ft_42sh_spl_find((void **)
-	array->lp_auto->spl_all_cmd,array->lp_auto->count_all, list->name,
+	array->lp_auto->spl_all_cmd, array->lp_auto->count_all, list->name,
 	list->n_cnt);
 	auto_list = spl[0];
 	if (auto_list->b_type == AUTO_TYPE_ALIAS_42SH)
@@ -27,11 +27,12 @@ register t_pguitar_alias_42sh *list)
 		array->lp_auto->count_all--;
 		ft_42sh_list_cut(&array->lp_auto->all_cmd,
 		(t_std_key_42sh *)auto_list);
-		ft_42sh_auto_free_list(auto_list);
+		auto_list->std.next = (void *)array->lp_auto->count_new_alias;
+		array->lp_auto->count_new_alias = (size_t)auto_list;
 	}
 	else
 		auto_list->b_type = auto_list->b_type ^ AUTO_TYPE_ALIAS_42SH;
-	free(list);
+	ft_free(list);
 }
 
 void			ft_42sh_unalias_not_exists(register t_main_42sh *array,
@@ -99,12 +100,21 @@ register char **lp_arg)
 void			ft_42sh_unalias(register t_main_42sh *array,
 register char **lp_arg)
 {
+	register t_all_cmd_42sh		*auto_list;
+	register t_all_cmd_42sh		*auto_list_tmp;
+
 	if (!(*lp_arg) || array->pguitar.list == 0)
 		return ;
-	array->lp_auto->count_new_alias = array->lp_auto->count_all;
+	array->lp_auto->count_new_alias = 0;
 	ft_42sh_alias_unalias_read_alias(array, lp_arg);
-	if (array->lp_auto->count_new_alias != array->lp_auto->count_all)
+	if ((auto_list = (void *)array->lp_auto->count_new_alias) != 0)
 	{
+		while (auto_list != 0)
+		{
+			auto_list_tmp = auto_list;
+			auto_list = (void *)auto_list->std.next;
+			ft_42sh_auto_free_list(auto_list_tmp);
+		}
 		ft_free(array->lp_auto->spl_all_cmd);
 		ft_42sh_auto_create_array(array, array->lp_auto->all_cmd.first,
 		array->lp_auto->count_all);

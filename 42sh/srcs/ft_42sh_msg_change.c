@@ -27,6 +27,16 @@ static void		fn_while(register t_in_42sh *list, register size_t offset)
 	}
 }
 
+static size_t	fn_set_add(register t_main_42sh *array)
+{
+	register size_t		offset;
+
+	offset = PRE_MSG_LITTER_42SH - array->msg.pre_msg_litter;
+	array->msg.pre_msg = PRTF_BOLT""MSG_42SH""PRTF_RESET;
+	array->msg.pre_msg_litter = PRE_MSG_LITTER_42SH;
+	return (offset);
+}
+
 static size_t	fn_set(register t_main_42sh *array,
 register unsigned char litter)
 {
@@ -34,28 +44,24 @@ register unsigned char litter)
 
 	if (litter == '<')
 	{
-		offset = PRE_MSG_HEREDOC_LITTER_42SH - array->msg.pre_msg_litter;
-		array->msg.pre_msg = PRE_MSG_HEREDOC_42SH;
-		array->msg.pre_msg_litter = PRE_MSG_HEREDOC_LITTER_42SH;
+		offset = array->msg.hrdc_lit - array->msg.pre_msg_litter;
+		array->msg.pre_msg = array->msg.hrdc;
+		array->msg.pre_msg_litter = array->msg.hrdc_lit;
 	}
 	else if (litter == '}' || litter == ')')
 	{
 		offset = PRE_MSG_SUB_LITTER_42SH - array->msg.pre_msg_litter;
-		array->msg.pre_msg = PRE_MSG_SUB_42SH;
+		array->msg.pre_msg = PRTF_BOLT""MSG_SUB_42SH""PRTF_RESET;
 		array->msg.pre_msg_litter = PRE_MSG_SUB_LITTER_42SH;
 	}
 	else if (litter == '&' || litter == '|')
 	{
 		offset = PRE_MSG_CMD_LITTER_42SH - array->msg.pre_msg_litter;
-		array->msg.pre_msg = PRE_MSG_CMD_42SH;
+		array->msg.pre_msg = PRTF_BOLT""MSG_CMD_42SH""PRTF_RESET;
 		array->msg.pre_msg_litter = PRE_MSG_CMD_LITTER_42SH;
 	}
 	else
-	{
-		offset = PRE_MSG_LITTER_42SH - array->msg.pre_msg_litter;
-		array->msg.pre_msg = PRE_MSG_42SH;
-		array->msg.pre_msg_litter = PRE_MSG_LITTER_42SH;
-	}
+		offset = fn_set_add(array);
 	return (offset);
 }
 
@@ -70,13 +76,13 @@ register unsigned char litter, unsigned char litter_prev)
 	if (litter == '"')
 	{
 		offset = PRE_MSG_DQUOTE_LITTER_42SH - array->msg.pre_msg_litter;
-		array->msg.pre_msg = PRE_MSG_DQUOTE_42SH;
+		array->msg.pre_msg = PRTF_BOLT""MSG_DQUOTE_42SH""PRTF_RESET;
 		array->msg.pre_msg_litter = PRE_MSG_DQUOTE_LITTER_42SH;
 	}
 	else if (litter == '\'')
 	{
 		offset = PRE_MSG_QUOTE_LITTER_42SH - array->msg.pre_msg_litter;
-		array->msg.pre_msg = PRE_MSG_QUOTE_42SH;
+		array->msg.pre_msg = PRTF_BOLT""MSG_QUOTE_42SH""PRTF_RESET;
 		array->msg.pre_msg_litter = PRE_MSG_QUOTE_LITTER_42SH;
 	}
 	else

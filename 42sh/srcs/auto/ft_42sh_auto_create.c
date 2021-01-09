@@ -58,7 +58,7 @@ register t_all_cmd_42sh *list, register size_t count)
 	register t_all_cmd_42sh		**spl;
 
 	if ((spl = ft_malloc(sizeof(t_all_cmd_42sh *) * (count + 1))) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	spl[count] = 0;
 	array->lp_auto->spl_all_cmd = spl;
 	while (list != 0)
@@ -68,13 +68,8 @@ register t_all_cmd_42sh *list, register size_t count)
 	}
 }
 
-void					ft_42sh_auto_create(register t_main_42sh *array)
+static void				fn_add_bultin(register t_main_42sh *array)
 {
-	register char							**spl;
-	register t_pguitar_alias_42sh			*list;
-
-	array->lp_auto->count_all = 0;
-	array->lp_auto->max_litter = 0;
 	fn_add_list(array, MSG_EXPR_42SH, &ft_42sh_cm_export, AUTO_TYPE_FUN_42SH);
 	fn_add_list(array, "true", &ft_42sh_cm_true, AUTO_TYPE_FUN_42SH);
 	fn_add_list(array, "false", &ft_42sh_cm_false, AUTO_TYPE_FUN_42SH);
@@ -91,6 +86,17 @@ void					ft_42sh_auto_create(register t_main_42sh *array)
 	fn_add_list(array, MSG_BG_42SH, &ft_42sh_cm_bg, AUTO_TYPE_FUN_42SH);
 	fn_add_list(array, MSG_HASH_42SH, &ft_42sh_cm_hash, AUTO_TYPE_FUN_42SH);
 	fn_add_list(array, MSG_TEST_42SH, &ft_42sh_cm_test, AUTO_TYPE_FUN_42SH);
+	ft_42sh_task_add_bultin(array, fn_add_list);
+}
+
+void					ft_42sh_auto_create(register t_main_42sh *array)
+{
+	register char							**spl;
+	register t_pguitar_alias_42sh			*list;
+
+	array->lp_auto->count_all = 0;
+	array->lp_auto->max_litter = 0;
+	fn_add_bultin(array);
 	if ((spl = array->lp_spl_path) != 0)
 	{
 		fn_while_dir(array, spl, 0);
@@ -99,7 +105,7 @@ void					ft_42sh_auto_create(register t_main_42sh *array)
 	list = array->pguitar.list;
 	while (list != 0)
 	{
-		fn_add_list(array, list->name, 0, AUTO_TYPE_ALIAS_42SH);
+		ft_42sh_auto_sort_paste(array, list->name, 0, AUTO_TYPE_ALIAS_42SH);
 		list = list->next;
 	}
 	ft_42sh_auto_create_array(array, array->lp_auto->all_cmd.first,

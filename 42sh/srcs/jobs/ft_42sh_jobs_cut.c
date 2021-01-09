@@ -70,7 +70,7 @@ register t_jobs_42sh *jobs)
 	while ((tmp = last->next) != 0 && tmp->count != 1)
 		last = tmp;
 	fn_set(array, jobs->prev, last->next);
-	fn_set_id(array, jobs->prev_id, last->next_id);
+	fn_set_id(array, jobs->prev_id, jobs->next_id);
 	last->next = 0;
 	return (jobs);
 }

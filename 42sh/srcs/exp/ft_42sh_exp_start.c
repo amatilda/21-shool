@@ -12,7 +12,7 @@
 
 #include "includes/ft_42sh_exp.h"
 
-static void			fn_set(register t_main_42sh *array)
+static void			fn_special(register t_main_42sh *array)
 {
 	t_add_exp_42sh					in;
 	register void					*key;
@@ -20,11 +20,20 @@ static void			fn_set(register t_main_42sh *array)
 
 	in.value = 0;
 	in.value_end = 0;
-	in.b_type = (EXP_TYPE_NUMBER_42SH | EXP_TYPE_R_ONLY_42SH | EXP_TYPE_LOCAL_42SH);
-	key =  "?";
+	in.b_type = (EXP_TYPE_NUMBER_42SH | EXP_TYPE_R_ONLY_42SH |
+	EXP_TYPE_LOCAL_42SH);
+	key = "?";
 	list = ft_42sh_exp_add(array, key, key + 1, &in);
 	list->number = 0;
 	array->env.exit_status = list;
+	key = "!";
+	list = ft_42sh_exp_add(array, key, key + 1, &in);
+	list->number = 0;
+	array->env.last_pid = list;
+	key = "$";
+	list = ft_42sh_exp_add(array, key, key + 1, &in);
+	list->number = array->pr.pid_main;
+	array->env.shell_pid = list;
 }
 
 void				ft_42sh_exp_start(register t_main_42sh *array,
@@ -47,6 +56,6 @@ register char **env)
 		in.b_type = EXP_TYPE_EVERIMENT_42SH;
 		ft_42sh_exp_add(array, key, value - 1, &in);
 	}
-	fn_set(array);
+	fn_special(array);
 	ft_42sh_exp_standart(array);
 }

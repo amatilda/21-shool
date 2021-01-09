@@ -12,7 +12,7 @@
 
 #include "ft_42sh.h"
 
-uintmax_t		ft_42sh_dsp_position(register t_main_42sh *array)
+uintmax_t		ft_42sh_dsp_position(void)
 {
 	register uintmax_t			out;
 	register ssize_t			tempos;
@@ -20,9 +20,9 @@ uintmax_t		ft_42sh_dsp_position(register t_main_42sh *array)
 	register unsigned char		*e;
 	char						buff[30];
 
-	write(array->fd, "\x1b[6n", 4);
+	write(FD_TERMINAL_42SH, "\x1b[6n", 4);
 	b = (void *)buff;
-	if ((tempos = read(array->fd, b, (sizeof(buff) - 1))) <= 2)
+	if ((tempos = read(FD_TERMINAL_42SH, b, (sizeof(buff) - 1))) <= 2)
 		return (0);
 	e = b + tempos;
 	b += 2;

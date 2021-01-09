@@ -40,11 +40,26 @@ register uint_fast8_t b_test)
 	return (lit);
 }
 
+static void			*fn_untf8(register unsigned char *b, size_t *count,
+size_t *count_litter, register unsigned char lit)
+{
+	*count = *count + 1;
+	*count_litter = *count_litter + 1;
+	if ((lit & 0x80) == 0)
+		return (b);
+	while (((lit = lit << 1) & 0x80) != 0)
+	{
+		b++;
+		*count = *count + 1;
+	}
+	return (b);
+}
+
 size_t				ft_42sh_str_shield_count(register unsigned char *b,
 register unsigned char *e, register uint_fast8_t b_test,
 register t_shield_out_42sh *lp)
 {
-	register size_t				count;
+	size_t						count;
 	size_t						count_litter;
 	register unsigned char		lit;
 
@@ -55,16 +70,10 @@ register t_shield_out_42sh *lp)
 		if ((lit = b++[0]) == '\n')
 			count += fn_set_test(&count_litter, b_test);
 		else if (lit == '\'' || lit == '"' || lit == '$' || lit == '\\' ||
-		lit == ' ' || lit == '[' || lit == ']' || lit == '*'  || lit == '?')
+		lit == ' ' || lit == '[' || lit == ']' || lit == '*' || lit == '?')
 			count += fn_set(2, &count_litter);
-		else 
-		{
-			count++;
-			count_litter++;
-			if ((lit & 0x80) != 0)
-				while (((lit = lit << 1) & 0x80) != 0)
-					b++;
-		}
+		else
+			b = fn_untf8(b, &count, &count_litter, lit);
 	}
 	return (fn_finish(lp, count, count_litter));
 }

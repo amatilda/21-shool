@@ -10,28 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_42sh.h"
-
-static void		fn_free(register t_jobs_42sh *jobs)
-{
-	register void				*tmp;
-	register t_exp_set_42sh		*exp_set;
-
-	exp_set = jobs->exp_set;
-	while (exp_set != 0)
-	{
-		tmp = (void *)exp_set;
-		exp_set = exp_set->next;
-		ft_free(tmp);
-	}
-	if ((tmp = (void *)jobs->lp_arg) != 0)
-		ft_strsplit_free((char **)tmp);
-	if (((jobs->b_type & AUTO_TYPE_FUN_42SH) == 0 && (tmp = jobs->path) != 0))
-		ft_free(tmp);
-	if ((tmp = jobs->cmd) != 0)
-		ft_free(tmp);
-	ft_free(jobs);
-}
+#include "includes/ft_42sh_jobs.h"
 
 void			ft_42sh_jobs_free_all(register t_main_42sh *array)
 {
@@ -45,7 +24,7 @@ void			ft_42sh_jobs_free_all(register t_main_42sh *array)
 	{
 		tmp = jobs;
 		jobs = jobs->next;
-		fn_free(tmp);
+		ft_42sh_jobs_free(tmp);
 	}
 	array->pr.jb.first = 0;
 	array->pr.jb_id.first = 0;
@@ -63,7 +42,7 @@ void			ft_42sh_jobs_clean(register t_main_42sh *array)
 	{
 		tmp = jobs;
 		jobs = jobs->next;
-		fn_free(tmp);
+		ft_42sh_jobs_free(tmp);
 	}
 }
 
@@ -77,7 +56,7 @@ register t_jobs_42sh *jobs)
 	{
 		tmp = jobs;
 		jobs = jobs->next;
-		fn_free(tmp);
+		ft_42sh_jobs_free(tmp);
 	}
 }
 
@@ -94,6 +73,6 @@ register t_jobs_42sh *jobs)
 		tmp = jobs;
 		jobs = jobs->next;
 		ft_42sh_jobs_fd_close(tmp, 0);
-		fn_free(tmp);
+		ft_42sh_jobs_free(tmp);
 	}
 }

@@ -25,7 +25,14 @@ register t_jobs_42sh *jobs, register t_pipe_42sh *pipe, register size_t b_flag)
 	}
 	jobs->b_fd_left |= tempos;
 	if ((b_flag & PIPE_AND_42SH) != 0)
-		ft_42sh_pipe_pre_and_left(jobs, pipe);
+	{
+		if (ft_42sh_pipe_pre_and_left(jobs, pipe) == 0)
+		{
+			ft_42sh_jobs_set_err(array, MSG_PIPE_LIMIT_FD_42SH, "",
+			STATUS_FALTURE_42SH);
+			return (0);
+		}
+	}
 	return (1);
 }
 

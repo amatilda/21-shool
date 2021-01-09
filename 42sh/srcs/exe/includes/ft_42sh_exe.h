@@ -15,6 +15,10 @@
 
 # include "ft_42sh.h"
 
+void			ft_42sh_exe_fork(register t_main_42sh *array,
+register t_jobs_42sh *jobs, int *fds);
+void			ft_42sh_exe_grup(register t_main_42sh *array,
+register t_jobs_42sh *jobs, pid_t pid, int *fds);
 size_t			ft_42sh_exe_fun(register t_main_42sh *array,
 register t_jobs_42sh *jobs, char **lp_arg,
 void (*f)(register t_main_42sh *array, register char **lp_arg));
@@ -32,7 +36,7 @@ register t_jobs_42sh *jobs, register size_t b_test);
 size_t			ft_42sh_exe_err_foor(register t_main_42sh *array,
 register t_jobs_42sh *jobs);
 
-size_t			ft_42sh_exe_wait_script(register t_main_42sh *array,
+size_t			ft_42sh_exe_wait_finish(register t_main_42sh *array,
 register t_jobs_42sh *jobs, t_jobs_42sh *jobs_cl, register size_t b_test);
 
 #endif

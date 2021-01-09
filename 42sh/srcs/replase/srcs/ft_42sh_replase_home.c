@@ -12,100 +12,108 @@
 
 #include "../includes/ft_42sh_replase.h"
 
-size_t			ft_42sh_replase_home_test(register unsigned char *start,
-register unsigned char *b)
+static void		*fn_test_end(register unsigned char *b,
+register unsigned char *e)
 {
-	if (start == b - 1 || b[-2] <= 0x20)
+	unsigned char				*end;
+	register unsigned char		lit;
+
+	end = b;
+	lit = '~';
+	while ((lit = ft_42sh_parsing_test_next(&end, e, 0, lit)) != 0)
+	{
+		if (lit == '"' || lit == '\'')
+			return (0);
+		if (lit == '/' || lit == ':')
+		{
+			end--;
+			break ;
+		}
+	}
+	return (end);
+}
+
+static size_t	fn_test_start(register unsigned char *b,
+register unsigned char *e)
+{
+	register unsigned char		lit;
+
+	if (b == e)
+		return (1);
+	while (b < e && (lit = b++[0]) != '=')
+		if (lit == '\\')
+			b++;
+	if (lit != '=')
+		return (0);
+	if (b == e)
+		return (1);
+	if (e[-1] != ':')
+		return (0);
+	if (e - b == 1 || e[-2] != '\\')
+		return (1);
+	e--;
+	while (b < e)
+		if ((lit = b++[0]) == '\\')
+			b++;
+	if (b == e)
 		return (1);
 	return (0);
 }
 
-static void		*fn_login(register t_main_42sh *array,
-register unsigned char **out, register unsigned char *b,
+size_t			ft_42sh_replase_home_test(register t_main_42sh *array,
+register unsigned char *start, register unsigned char *b,
 register unsigned char *e)
 {
-	unsigned char						*start;
-	register unsigned char				*dest;
-	register size_t						count;
-	t_replase_in_42sh					in;
-
-	in.array = array;
-	in.b_mode = PARSING_MODE_CMD_42SH;
-	start = b;
-	if ((count = ft_42sh_replase_count(&in, &start, out, e)) == 0)
+	if ((e = fn_test_end(b, e)) == 0)
 		return (0);
-	if ((dest = ft_malloc(count + LEN_(EXP_HOME_PATH_42SH) + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
-	ft_memcpy(dest, EXP_HOME_PATH_42SH, LEN_(EXP_HOME_PATH_42SH));
-	b = dest + LEN_(EXP_HOME_PATH_42SH);
-	ft_42sh_replase(&in, b, start, e);
-	b[count] = 0;
-	count += LEN_(EXP_HOME_PATH_42SH);
-	array->count_home_tmp = count;
-	return (dest);
-}
-
-static size_t	fn_login_faill(register unsigned char **out,
-register unsigned char *dest, register unsigned char *b)
-{
-	*out = b;
-	ft_free(dest);
+	if (fn_test_start(start, b - 1) == 0)
+		return (0);
+	array->home.lp_home_tmp_b = b;
+	array->home.lp_home_tmp_e = e;
 	return (1);
 }
 
 size_t			ft_42sh_replase_home_count(register t_main_42sh *array,
-register unsigned char **out, register unsigned char *e)
+register unsigned char **out)
 {
+	register t_logins_42sh				*list;
 	register unsigned char				*b;
-	register unsigned char				*tmp;
-	register unsigned char				litter;
-	register unsigned char				*dest;
-	struct stat							st;
+	register unsigned char				*e;
 
-	b = *out;
-	if (b == e || (b < e && (b[0] <= 0x20 || b[0] == '/' ||
-	ft_42sh_parsing_litter_e_f(b, e) == 0)))
-		return ((array->lp_home == 0) ? 0 : array->count_home);
-	if (b[0] == '~')
+	b = array->home.lp_home_tmp_b;
+	e = array->home.lp_home_tmp_e;
+	if (b == e)
+		return ((array->home.lp_home == 0) ? 0 : array->home.count_home);
+	list = ft_42sh_list_find_key(&array->login, b, e - b);
+	if ((array->home.list = list) == 0)
 		return (1);
-	if ((dest = fn_login(array, out, b, e)) == 0)
-		return ((array->lp_home == 0) ? 0 : array->count_home);
-	tmp = dest;
-	while ((litter = tmp[0]) != 0 && litter == '/')
-		tmp++;
-	tmp[0] = 0;
-	if (stat((void *)dest, &st) != 0 || (st.st_mode & S_IFMT) != S_IFDIR)
-		return (fn_login_faill(out, dest, b));
-	tmp[0] = litter;
-	array->lp_home_tmp = dest;
-	array->lp_home_tmp_next = *out;
-	return (array->count_home_tmp);
+	*out = e;
+	return (list->home_dir_count);
 }
 
 void			*ft_42sh_replase_home(register t_main_42sh *array,
-register unsigned char *dest, register unsigned char **out,
-register unsigned char *e)
+register unsigned char *dest, register unsigned char **out)
 {
-	register size_t						count;
+	register t_logins_42sh				*list;
 	register unsigned char				*b;
+	register unsigned char				*e;
+	register size_t						count;
 
-	b = *out;
-	if (b == e || (b < e && (b[0] <= 0x20 || b[0] == '/' ||
-	ft_42sh_parsing_litter_e_f(b, e) == 0)))
+	b = array->home.lp_home_tmp_b;
+	e = array->home.lp_home_tmp_e;
+	if (b == e)
 	{
-		if ((b = (void *)array->lp_home) == 0)
+		if ((b = (void *)array->home.lp_home) == 0)
 			return (dest);
-		ft_memcpy(dest, b, (count = array->count_home));
+		ft_memcpy(dest, b, (count = array->home.count_home));
 		return (dest + count);
 	}
-	if (b[0] == '~' || (b = array->lp_home_tmp) == 0)
+	if ((list = array->home.list) == 0)
 	{
 		dest++[0] = '~';
 		return (dest);
 	}
-	ft_memcpy(dest, b, (count = array->count_home_tmp));
-	ft_free(b);
-	array->lp_home_tmp = 0;
-	*out = array->lp_home_tmp_next;
+	*out = e;
+	ft_memcpy(dest, list->home_dir, (count = list->home_dir_count));
 	return (dest + count);
 }

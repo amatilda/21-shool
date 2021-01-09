@@ -17,11 +17,11 @@ register unsigned char *b, register unsigned char **out,
 register unsigned char *e)
 {
 	if (b + 2 < e && b[0] == '(' && b[1] == '(')
-		return (ft_42sh_arith_test(array, out, e));
+		return (ft_42sh_calc_test(array, out, e));
 	return (ft_42sh_dq_test_sintax_exp(array, out, e));
 }
 
-unsigned char		ft_42sh_dq_test_sintax_dq(register t_main_42sh *array,
+unsigned char			ft_42sh_dq_test_sintax_dq(register t_main_42sh *array,
 unsigned char **out, register unsigned char *e, register unsigned char lit)
 {
 	unsigned char			*b;

@@ -74,7 +74,8 @@ register t_jobs_42sh *jobs)
 		if ((jobs = jobs->next) == 0 || jobs->count == 1)
 			break ;
 	}
-	kill(array->pr.even_child, SIGCONT);
+	if (write(array->pr.even_fds[PIPE_WRITE_42SH], "0", 1) == -1)
+		ft_42sh_exit(E_PIPE_CODE_42SH, __FILE__, __func__, __LINE__);
 }
 
 void			ft_42sh_signal_child(int signo)
@@ -87,10 +88,10 @@ void			ft_42sh_signal_child(int signo)
 	array = g_lp_array;
 	while ((pid = waitpid(-1, &stat_loc, WNOHANG | WUNTRACED)) > 0)
 	{
-		if (pid == array->pr.even_child)
+		if (array->pr.pid_not_fork == pid)
 		{
-			if (WIFSIGNALED(stat_loc) != 0)
-				exit(WTERMSIG(stat_loc));
+			if (write(array->pr.even_fds[PIPE_WRITE_42SH], "0", 1) == -1)
+				ft_42sh_exit(E_PIPE_CODE_42SH, __FILE__, __func__, __LINE__);
 			continue ;
 		}
 		if (fn_test_status((tmp = array->pr.jobs_current), pid, stat_loc) == 0)

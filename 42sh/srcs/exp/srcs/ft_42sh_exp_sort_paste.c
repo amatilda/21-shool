@@ -65,23 +65,16 @@ register unsigned char *key, register size_t n)
 static size_t			fn_cmp(register t_main_42sh *array,
 register t_env_42sh *cur, register t_add_exp_42sh *in)
 {
-	register size_t				count;
-
-	if ((count = in->value_end - in->value) == cur->value_count &&
-	ft_strncmp(cur->lp_value, in->value, count) == 0)
-	{
-		if ((in->b_type & EXP_TYPE_EVERIMENT_42SH) != 0 &&
-		(cur->b_type & EXP_TYPE_EVERIMENT_42SH) == 0)
-		{
-			cur->b_type = (cur->b_type | EXP_TYPE_EVERIMENT_42SH) ^ EXP_TYPE_LOCAL_42SH;
-			array->env.count_env++;
-			array->env.count_local--;
-		}
-		return (0);
-	}
+	if ((in->b_type & EXP_TYPE_EVERIMENT_42SH) != 0)
+		in->b_type = in->b_type ^ EXP_TYPE_EVERIMENT_42SH;
+	else
+		in->b_type = in->b_type ^ EXP_TYPE_LOCAL_42SH;
 	if ((cur->b_type & EXP_TYPE_EVERIMENT_42SH) != 0)
-		in->b_type = cur->b_type;
+		in->b_type = in->b_type | EXP_TYPE_EVERIMENT_42SH;
+	else
+		in->b_type = in->b_type | EXP_TYPE_LOCAL_42SH;
 	return (1);
+	(void)array;
 }
 
 t_env_42sh				*ft_42sh_exp_sort_paste(register t_main_42sh *array,
@@ -105,8 +98,7 @@ register t_add_exp_42sh *in)
 			ft_42sh_exp_create(array, key, key_end, in)));
 		else if (tempos == 0 && cur->key_count == n)
 		{
-			if (fn_cmp(array, (t_env_42sh *)cur, in) == 0)
-				return (0);
+			fn_cmp(array, (t_env_42sh *)cur, in);
 			return (ft_42sh_exp_sort_paste_cut(&array->env, cur,
 			ft_42sh_exp_create(array, key, key_end, in)));
 		}

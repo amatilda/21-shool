@@ -28,7 +28,7 @@ register unsigned char *b, register unsigned char **e)
 	if ((count = ft_42sh_replase_count(&in, &start, &tmp, *e)) == 0)
 		return (0);
 	if ((tmp = ft_malloc(count)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_42sh_replase(&in, tmp, b, *e);
 	start = ft_42sh_str_shield(tmp, tmp + count, SHIELD_EXTERNALLY, &lp);
 	ft_free(tmp);
@@ -52,7 +52,8 @@ register t_in_42sh *list, register unsigned char *b, register unsigned char *e)
 	else if (e > cur)
 	{
 		n = e - cur;
-		ft_42sh_dsp_caret_right(array, list, ft_42sh_parsing_litter_n((char *)cur,
+		ft_42sh_dsp_caret_right(array, list,
+		ft_42sh_parsing_litter_n((char *)cur,
 		(char *)(cur + n)), n);
 	}
 	ft_42sh_str_delete(array, list, (void *)b,

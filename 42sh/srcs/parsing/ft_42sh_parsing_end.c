@@ -12,6 +12,14 @@
 
 #include "ft_42sh.h"
 
+static size_t	fn_finish(register t_main_42sh *array,
+unsigned char **out, unsigned char *b)
+{
+	*out = b;
+	return (0);
+	(void)array;
+}
+
 size_t			ft_42sh_parsing_end(register t_main_42sh *array,
 unsigned char **out, register unsigned char *e,
 unsigned char (*f)(register unsigned char *b, register unsigned char *e))
@@ -30,7 +38,8 @@ unsigned char (*f)(register unsigned char *b, register unsigned char *e))
 			ft_42sh_dq_skip_dq(&b, e, litter);
 		else if (litter == '$' && b < e && b[0] == '{')
 			ft_42sh_exp_pars_exp_skip(&b, e);
-		else if (litter != '|' && (old = ft_42sh_parsing_test_pipe(b - 1, e, old)) != 0)
+		else if (litter != '|' && (old =
+		ft_42sh_parsing_test_pipe(b - 1, e, old)) != 0)
 			b += old;
 		else if (f(b - 1, e) == 0)
 		{
@@ -39,7 +48,5 @@ unsigned char (*f)(register unsigned char *b, register unsigned char *e))
 		}
 		old = litter;
 	}
-	*out = b;
-	return (0);
-	(void)array;
+	return (fn_finish(array, out, b));
 }

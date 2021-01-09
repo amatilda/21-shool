@@ -33,7 +33,7 @@ register t_in_42sh *list)
 	ft_42sh_str(array, list, (void *)"    ", &in);
 }
 
-static void			*fn_pipe_end(register unsigned char *b,
+static void				*fn_pipe_end(register unsigned char *b,
 register unsigned char *e)
 {
 	register unsigned char		litter;
@@ -43,17 +43,26 @@ register unsigned char *e)
 	return (b);
 }
 
+static void				*fn_set(register t_in_42sh *list,
+unsigned char **start, unsigned char **end)
+{
+	register unsigned char		*b;
+
+	*start = (void *)list->lp_b;
+	*end = (void *)(*start + list->count);
+	b = *start;
+	return (b);
+}
+
 void					ft_42sh_key_tab(register t_main_42sh *array,
 register t_in_42sh *list)
 {
 	register unsigned char		*b;
 	register unsigned char		*e;
-	register unsigned char		*start;
-	register unsigned char		*end;
+	unsigned char				*start;
+	unsigned char				*end;
 
-	start = (void *)list->lp_b;
-	end = (void *)(start + list->count);
-	b = start;
+	b = fn_set(list, &start, &end);
 	e = end;
 	start = ft_42sh_key_tab_word_start(start, (void *)list->lp_current, end);
 	end = ft_42sh_key_tab_word_end(start, end);
@@ -71,6 +80,6 @@ register t_in_42sh *list)
 	}
 	else
 		start = ft_42sh_key_tab_eq(start, end);
-	ft_42sh_auto_comp_init_struct(array, list, (void*)start,
+	ft_42sh_glb_auto_other(array, list, (void*)start,
 	fn_pipe_end(start, end));
 }

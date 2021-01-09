@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_42sh_exe_finish.c                               :+:      :+:    :+:   */
+/*   ft_42sh_exe_wait.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amatilda <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,49 +11,6 @@
 /* ************************************************************************** */
 
 #include "includes/ft_42sh_exe.h"
-
-static void		fn_status(register t_main_42sh *array,
-t_jobs_42sh *jobs_cl, int stat_loc)
-{
-	if ((jobs_cl->b_type & AUTO_TYPE_EXE_42SH) != 0 || (jobs_cl->b_type & AUTO_TYPE_RUN_42SH) != 0)
-	{
-		if (WIFEXITED(stat_loc) != 0)
-			stat_loc = WEXITSTATUS(stat_loc);
-		else
-		{
-			if (WIFSIGNALED(stat_loc) != 0)
-				stat_loc = 128 + WTERMSIG(stat_loc);
-			else if (WIFSTOPPED(stat_loc) != 0)
-				stat_loc = 128 + WSTOPSIG(stat_loc);
-			else
-				stat_loc = 128;
-		}
-	}
-	array->env.exit_status->number = (unsigned char)stat_loc;
-}
-
-static size_t	fn_finish(register t_main_42sh *array,
-register t_jobs_42sh *jobs, t_jobs_42sh *jobs_cl, register size_t b_test)
-{
-	if ((b_test & JOBS_SUSPEND_42SH) != 0)
-	{
-		array->b_read = 1;
-		array->tty_change.c_cc[VMIN] = 0;
-		array->tty_change.c_cc[VTIME] = 1;
-	}
-	if (ioctl(array->fd, TIOCSPGRP, &array->pr.pid_main) == -1)
-		ft_42sh_exit(E_IOTL_CODE_42SH);
-	if (ioctl(array->fd, TIOCSETA, &array->tty_change) == -1)
-		ft_42sh_exit(E_IOTL_CODE_42SH);
-	if (array->b_quest_exit == 0 && (ft_42sh_dsp_position(array) & 0xFFFFFFFF) != 1)
-		ft_write_buffer_str_zero(&array->out, MSG_PIPE_NOT_N_42SH);
-	if ((b_test & JOBS_MSG_42SH) != 0)
-		ft_42sh_jobs_msg(array, jobs, JOBS_MSG_PROC_42SH);
-	fn_status(array, jobs_cl, jobs_cl->stat_loc);
-	if ((b_test & JOBS_SUSPEND_42SH) == 0)
-		ft_42sh_jobs_free_list_count(array, jobs_cl);
-	return (((b_test & JOBS_STOP_42SH) != 0) ? 0 : 1);
-}
 
 static size_t	fn_test(register t_jobs_42sh *jobs, int stat_loc)
 {
@@ -84,27 +41,27 @@ static size_t	fn_test(register t_jobs_42sh *jobs, int stat_loc)
 	return (b_test);
 }
 
-size_t			ft_42sh_exe_wait2(register t_main_42sh *array,
+static size_t	ft_42sh_exe_wait_add(register t_main_42sh *array,
 register t_jobs_42sh *jobs, t_jobs_42sh *jobs_cl)
 {
+	char						buff[1];
 	register t_jobs_42sh		*tmp;
-	register pid_t				pid;
-	int							stat_loc;
 
 	tmp = jobs;
 	while (0xFF)
 	{
-		if (tmp->pid != 0)
+		if (tmp->pid_view != 0 || array->pr.pid_not_fork != 0)
 		{
-			waitpid((pid = array->pr.even_child), &stat_loc, WCONTINUED);
-			kill(pid, SIGSTOP);
+			if (read(array->pr.even_fds[PIPE_READ_42SH], buff, 1) == -1)
+				ft_42sh_exit(E_PIPE_CODE_42SH, __FILE__, __func__, __LINE__);
+			array->pr.pid_not_fork = 0;
 			break ;
 		}
 		if ((tmp = tmp->next) == 0 || tmp->count == 1)
 			break ;
 	}
 	array->pr.jobs_current = 0;
-	return (fn_finish(array, jobs, jobs_cl, fn_test(jobs, 0)));
+	return (ft_42sh_exe_wait_finish(array, jobs, jobs_cl, fn_test(jobs, 0)));
 }
 
 static void		fn_wait(register t_jobs_42sh *jobs)
@@ -120,11 +77,12 @@ static void		fn_wait(register t_jobs_42sh *jobs)
 		fd = 0;
 		while (count != 0)
 		{
-			if ((count & 0x1) != 0)
-				if ((pid = jobs->pipe_pid[fd]) != 0 &&
-				waitpid(pid, &stat_loc, WUNTRACED) != -1)
-					if (WIFSTOPPED(stat_loc) == 0)
-						jobs->pipe_pid[fd] = 0;
+			if ((count & 0x1) != 0 && (pid = jobs->pipe_pid[fd]) != 0)
+			{
+				waitpid(pid, &stat_loc, WUNTRACED);
+				if (WIFSTOPPED(stat_loc) == 0)
+					jobs->pipe_pid[fd] = 0;
+			}
 			count = count >> 1;
 			fd++;
 		}
@@ -136,18 +94,26 @@ static void		fn_wait(register t_jobs_42sh *jobs)
 size_t			ft_42sh_exe_wait(register t_main_42sh *array,
 register t_jobs_42sh *jobs, t_jobs_42sh *jobs_cl)
 {
+	register pid_t				pid;
 	register t_jobs_42sh		*tmp;
-	int							stat_loc;
 
+	if ((array->b_mode & MODE_SIGCHILD_42SH) != 0)
+		return (ft_42sh_exe_wait_add(array, jobs, jobs_cl));
 	tmp = jobs;
 	while (0xFF)
 	{
-		if (tmp->pid != 0 && waitpid(tmp->pid, &stat_loc, WUNTRACED) != -1)
-			tmp->stat_loc = stat_loc;
+		if ((pid = tmp->pid) != 0)
+			waitpid((pid = tmp->pid), &tmp->stat_loc, WUNTRACED);
 		if ((tmp = tmp->next) == 0 || tmp->count == 1)
 			break ;
 	}
-	fn_wait(jobs);
+	if ((pid = array->pr.pid_not_fork) != 0)
+	{
+		waitpid(pid, &jobs_cl->stat_loc, WUNTRACED);
+		array->pr.pid_not_fork = 0;
+	}
+	else
+		fn_wait(jobs);
 	array->pr.jobs_current = 0;
-	return (fn_finish(array, jobs, jobs_cl, fn_test(jobs, 0)));
+	return (ft_42sh_exe_wait_finish(array, jobs, jobs_cl, fn_test(jobs, 0)));
 }

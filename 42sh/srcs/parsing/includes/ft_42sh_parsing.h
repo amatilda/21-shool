@@ -19,7 +19,7 @@ void					ft_42sh_parsing_while(register t_main_42sh *array,
 register t_in_42sh *list, unsigned char *b, register unsigned char *e);
 size_t					ft_42sh_parsing_while_availability(
 register t_main_42sh *array, register t_jobs_42sh *jobs, unsigned char *b,
-register size_t n);
+size_t n);
 unsigned char			*ft_42sh_parsing_while_logic(
 register t_main_42sh *array, register unsigned char *b,
 register unsigned char *e);
@@ -29,5 +29,8 @@ register unsigned char *e);
 void					*ft_42sh_parsing_cmd_ret(register t_replase_in_42sh
 *in, unsigned char **out, register t_exp_set_42sh *exp_set,
 register size_t count);
+void					*ft_42sh_parsing_exp_set_next(register
+t_replase_in_42sh *in, register t_jobs_42sh *jobs,
+unsigned char **out, register unsigned char *e);
 
 #endif

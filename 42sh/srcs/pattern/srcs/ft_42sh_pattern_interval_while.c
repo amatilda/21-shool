@@ -50,7 +50,7 @@ uint_fast8_t b_test)
 				return (fn_ret(1, b_test));
 			b_ptt = b_ptt + (tw_lit >> (sizeof(tw_lit) * 4));
 		}
-		if ((uint32_t)fr_lit == cmp_lit)
+		else if ((uint32_t)fr_lit == cmp_lit)
 			return (fn_ret(1, b_test));
 	}
 	return (fn_ret(0, b_test));

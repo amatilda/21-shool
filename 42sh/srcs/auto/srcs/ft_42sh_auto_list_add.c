@@ -12,7 +12,6 @@
 
 #include "../includes/ft_42sh_auto.h"
 
-
 static void		*fn_hash(register t_all_cmd_42sh *list,
 register void *str, register size_t b_type)
 {
@@ -32,11 +31,11 @@ register void *str, register size_t b_type)
 		list->count_cmd = 0;
 		list->b_type = list->b_type | AUTO_TYPE_HASH_42SH;
 		if ((list->path_hash = ft_strdup((void *)str)) == 0)
-			ft_42sh_exit(E_MEM_CODE_42SH);
+			ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 		return (0);
 	}
 	if ((list->path_hash = ft_strdup((void *)str)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	list->b_type = AUTO_TYPE_HASH_42SH;
 	return (list);
 }

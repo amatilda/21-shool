@@ -41,9 +41,9 @@ t_pguitar_alias_42sh **lp_first, register t_main_42sh *array)
 	lp_prev = 0;
 	while (0xFF)
 	{
-		if (!((*lp_first) = malloc(sizeof(t_pguitar_alias_42sh) +
+		if (!((*lp_first) = ft_malloc(sizeof(t_pguitar_alias_42sh) +
 			lp_alias->v_cnt + lp_alias->n_cnt + 2)))
-			ft_42sh_exit(E_MEM_CODE_42SH);
+			ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 		ft_42sh_alias_read_create_list(lp_alias, lp_first);
 		if (!(array->pguitar.list))
 			array->pguitar.list = (*lp_first);
@@ -75,7 +75,7 @@ static void	ft_42sh_alias_read_close_fd(int fd, int free_lp, void *lp)
 {
 	close(fd);
 	if (free_lp == 1)
-		free(lp);
+		ft_free(lp);
 }
 
 void		ft_42sh_alias_read_file(register t_main_42sh *array,
@@ -90,8 +90,8 @@ int fd)
 	stat(array->pguitar.f_modif.home, &st);
 	if (st.st_size > 1048576 || st.st_size == 0)
 		return (ft_42sh_alias_read_close_fd(fd, 0, NULL));
-	if (!(lp = malloc(st.st_size)))
-		ft_42sh_exit(E_MEM_CODE_42SH);
+	if (!(lp = ft_malloc(st.st_size)))
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	if (read(fd, lp, st.st_size) < 0)
 	{
 		ft_42sh_alias_read_close_fd(fd, 1, lp);
@@ -104,6 +104,6 @@ int fd)
 	sizeof(((t_pguitar_alias_file_42sh*)lp)->crc32), CRC32_START_MIRROR_42SH))
 		return (ft_42sh_alias_read_close_fd(fd, 1, lp));
 	ft_42sh_alias_read_file_offset(&lp, array);
-	free(lp);
+	ft_free(lp);
 	close(fd);
 }

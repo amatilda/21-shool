@@ -72,7 +72,7 @@ register t_string *root, register char *str, register size_t n)
 	len = root->len;
 	ret->max_len = n + len + 2;
 	if ((out = ft_malloc(ret->max_len)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	if (str[0] == '/')
 	{
 		str++;

@@ -18,6 +18,5 @@ void	*ft_malloc(register size_t n)
 
 	if ((out = malloc(n)) == 0)
 		return (0);
-
 	return (out);
 }

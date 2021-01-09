@@ -16,7 +16,7 @@
 # include "ft_42sh.h"
 
 t_in_42sh		*ft_42sh_sh_get(register t_main_42sh *array,
-register char **env_spl, register unsigned char *path);
+register char **env_spl, register unsigned char *path, register char **lp_arg);
 void			ft_42sh_sh_exit(register t_main_42sh *array,
 register size_t exit_code);
 t_main_42sh		*ft_42sh_sh_exit_zero_crit(register t_main_42sh *array,

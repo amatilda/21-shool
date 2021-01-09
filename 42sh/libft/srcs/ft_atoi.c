@@ -13,7 +13,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-
 int		ft_atoi(const char *str)
 {
 	register int		tmp;

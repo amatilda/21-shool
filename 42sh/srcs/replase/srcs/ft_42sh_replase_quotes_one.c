@@ -24,7 +24,7 @@ t_replase_in_42sh *in, register unsigned char **out)
 	while ((lit = b++[0]) != '\'')
 	{
 		if (lit == '\n')
-			count += (in->b_mode & PARSING_MODE_CMD_42SH) != 0 ? 1: 0;
+			count += (in->b_mode & PARSING_MODE_CMD_42SH) != 0 ? 1 : 0;
 		else
 			count++;
 	}

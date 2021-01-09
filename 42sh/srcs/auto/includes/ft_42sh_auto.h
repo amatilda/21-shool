@@ -22,7 +22,7 @@ register t_all_cmd_42sh *list, register void *str, register size_t b_type);
 t_all_cmd_42sh	**ft_42sh_auto_cmd_test(register t_main_42sh *array,
 register t_in_42sh *list, register t_all_cmd_42sh **spl,
 register t_all_cmd_42sh **spl_end);
-size_t				ft_42sh_auto_cmd_test_env(register t_main_42sh *array,
+size_t			ft_42sh_auto_cmd_test_env(register t_main_42sh *array,
 register t_in_42sh *list, register t_all_cmd_42sh **spl,
 register t_all_cmd_42sh **spl_end);
 size_t			ft_42sh_auto_cmd_env_corection(register t_main_42sh *array,

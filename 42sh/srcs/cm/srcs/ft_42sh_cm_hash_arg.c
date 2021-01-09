@@ -23,7 +23,8 @@ register unsigned char *b, register unsigned char *e)
 	array->lp_auto->spl_all_cmd, array->lp_auto->count_all, (void *)b, n)) == 0
 	|| spl[0]->std.key_count != n)
 	{
-		return (ft_42sh_dsp_err_msg_add_n(array, MSG_HASH_NOT_FIND_42SH,
+		return (ft_42sh_dsp_err_msg_add_n(array,
+		WAR_42SH""MSG_HASH_NOT_FIND_TXT_42SH""PRTF_RESET,
 		(void *)b, 0));
 	}
 	array->b_hash = HASH_ALL_42SH;

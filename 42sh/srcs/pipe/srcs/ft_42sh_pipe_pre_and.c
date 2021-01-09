@@ -40,7 +40,7 @@ register t_pipe_42sh *pipe_end, register int fd_1, register int fd_2)
 	return (count);
 }
 
-void			ft_42sh_pipe_pre_and_left(register t_jobs_42sh *jobs,
+size_t			ft_42sh_pipe_pre_and_left(register t_jobs_42sh *jobs,
 register t_pipe_42sh *pipe_end)
 {
 	register size_t				count;
@@ -52,63 +52,9 @@ register t_pipe_42sh *pipe_end)
 		pipe_end->b_flag = PIPE_CLOSE_42SH | PIPE_REPLASE_42SH | PIPE_LEFT_42SH;
 	else
 	{
-		pipe_end->fd_2 = dup(fd_2);
+		if ((pipe_end->fd_2 = dup(fd_2)) == -1)
+			return (0);
 		pipe_end->b_flag = PIPE_LEFT_42SH;
 	}
-}
-
-
-static size_t	fn_search(register t_pipe_42sh *pipe,
-register t_pipe_42sh *pipe_end, register int fd)
-{
-	register t_pipe_42sh	*pipe_tmp;
-	register size_t			b_flag;
-	register size_t			tempos;
-
-	tempos = 0;
-	pipe_tmp = pipe;
-	while (pipe < pipe_end)
-	{
-		if (((b_flag = pipe->b_flag) & PIPE_CLOSE_42SH) == 0 &&
-		fd == pipe->fd_1)
-		{
-			if ((b_flag & PIPE_AND_42SH) == 0)
-				return (1);
-			else
-				tempos = fn_search(pipe_tmp, pipe, pipe->fd_2) + 1;
-		}
-		pipe++;
-	}
-	if (tempos == 0 && pipe_end->fd_2 <= PIPE_MAX_SUPPORT_FD_42SH)
-		pipe_end->fd_2 = dup(pipe_end->fd_2);
-	return (tempos);
-}
-
-void			ft_42sh_pipe_pre_and_right(register t_jobs_42sh *jobs,
-register t_pipe_42sh *pipe, register t_pipe_42sh *pipe_end)
-{
-	register size_t			b_flag;
-	register t_pipe_42sh	*pipe_tmp;
-	register size_t			count;
-	register int			fd;
-
-	count = jobs->b_fd_right;
-	fd = 0;
-	while (count != 0)
-	{
-		if ((count & 0x1) != 0)
-		{
-			pipe_tmp = pipe;
-			while (pipe_tmp < pipe_end)
-			{
-				if (((b_flag = pipe_tmp->b_flag) & PIPE_CLOSE_42SH) == 0 &&
-				fd == pipe_tmp->fd_1)
-					if ((b_flag & PIPE_AND_42SH) != 0)
-						fn_search(pipe, pipe_tmp, pipe_tmp->fd_2);
-				pipe_tmp++;
-			}
-		}
-		count = count >> 1;
-		fd++;
-	}
+	return (1);
 }

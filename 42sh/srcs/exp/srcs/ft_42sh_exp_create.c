@@ -69,7 +69,7 @@ register t_add_exp_42sh *in)
 	correction = ft_42sh_exp_shield(in->value, in->value_end);
 	if ((out = ft_malloc(sizeof(t_env_42sh) + key_count +
 	value_count + 1 + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	fn_type(array, out, in, correction);
 	out->value_count = value_count;
 	tmp = out->key;

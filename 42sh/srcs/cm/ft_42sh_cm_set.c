@@ -22,6 +22,12 @@ static void		fn_view(register t_write_buff *out, register t_env_42sh *env)
 	ft_write_buffer_str_zero(out, "'");
 }
 
+static void		fn_empty(register t_main_42sh *array)
+{
+	return (ft_42sh_dsp_err_msg(array,
+	WAR_42SH""MSG_SET_NONE_TXT_42SH""PRTF_RESET));
+}
+
 void			ft_42sh_cm_set(register t_main_42sh *array,
 register char **lp_arg)
 {
@@ -31,7 +37,7 @@ register char **lp_arg)
 
 	env = array->env.root.first;
 	if (env == 0)
-		return (ft_42sh_dsp_err_msg(array, MSG_SET_NONE_42SH));
+		return (fn_empty(array));
 	if (ft_42sh_pipe_test_fd_dsp(array, STDOUT_FILENO, MSG_SET_42SH) == 0)
 		return ;
 	out = &array->out;
@@ -41,7 +47,7 @@ register char **lp_arg)
 		{
 			ft_write_buffer_str(out, env->std.lp_key, env->std.key_count + 1);
 			ft_write_buffer_str(out, buff, ft_itoa(buff, env->number, 10,
-			ITOA_LOWER));
+			ITOA_LOWER | ITOA_SIGNED));
 		}
 		else
 			fn_view(out, env);

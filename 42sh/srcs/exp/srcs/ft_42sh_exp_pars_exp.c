@@ -19,16 +19,10 @@ register unsigned char *dest, register unsigned char *b, register size_t tempos)
 
 	if ((list = ft_42sh_list_find_key(&in->array->env.root,
 	(void *)b, tempos)) != 0 &&
-	(tempos = (size_t)ft_42sh_exp_parsing_value(in->array, list, dest, in->b_mode)) != (size_t)dest)
+	(tempos = (size_t)ft_42sh_exp_parsing_value(in->array,
+	list, dest, in->b_mode)) != (size_t)dest)
 		return ((void *)tempos);
 	return (0);
-}
-
-static unsigned char	*fn_not(register unsigned char *dest, unsigned char **src,
-register unsigned char *end)
-{
-	*src = ft_42sh_parsing_sp(*src, end);
-	return (dest);
 }
 
 static unsigned char	*fn_eq(register t_replase_in_42sh *in,
@@ -60,7 +54,7 @@ register unsigned char *dest, unsigned char **src, register unsigned char *end)
 		return (ft_42sh_exp_pars_exp_sufix(in, dest, src, end));
 	else if (litter == '#')
 		return (ft_42sh_exp_pars_exp_prefix(in, dest, src, end));
-	return (fn_not(dest, src, end));
+	return (dest);
 }
 
 unsigned char			*ft_42sh_exp_pars_exp(register t_replase_in_42sh *in,
@@ -74,7 +68,7 @@ register unsigned char *dest, unsigned char **src, register unsigned char *end)
 	b = *src + 1;
 	if ((litter = b[0]) == '#')
 		b++;
-	tmp = (b[0] == '?') ?  b + 1 : ft_42sh_exp_name(b, end);
+	tmp = ft_42sh_exp_name_special(b, end);
 	if (tmp[0] != '}')
 	{
 		tempos = tmp - b;
@@ -89,5 +83,5 @@ register unsigned char *dest, unsigned char **src, register unsigned char *end)
 		return (ft_42sh_exp_pars_exp_litter(in->array, dest, b, tmp));
 	if ((b = fn_cmp(in, dest, b, tmp - b)) != 0)
 		return (b);
-	return (fn_not(dest, src, end));
+	return (dest);
 }

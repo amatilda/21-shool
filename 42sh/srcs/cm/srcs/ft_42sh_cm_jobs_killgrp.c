@@ -15,11 +15,15 @@
 void			ft_42sh_cm_jobs_killgrp(register t_jobs_42sh *jobs,
 register int signo)
 {
-	register pid_t			pid;
+	register pid_t				pid;
+	register size_t				count;
 
+	count = jobs->count;
+	while (count-- > 1)
+		jobs = jobs->prev;
 	while (0xFF)
 	{
-		if ((pid = jobs->pid_grp) != 0)
+		if ((pid = jobs->pid_view) != 0)
 		{
 			kill(~pid + 1, signo);
 			return ;

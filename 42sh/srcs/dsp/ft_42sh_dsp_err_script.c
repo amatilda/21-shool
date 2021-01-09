@@ -15,7 +15,8 @@
 static void			*fn_finish(register unsigned char *out,
 register unsigned char *tmp, register void *cmd, register size_t n_cmd)
 {
-	tmp = ft_memcpy(tmp, PRTF_RESET, LEN_(PRTF_RESET)) + LEN_(PRTF_RESET);
+	tmp = ft_memcpy(tmp, PRTF_RESET,
+	sizeof(PRTF_RESET) - 1) + sizeof(PRTF_RESET) - 1;
 	ft_memcpy(tmp, cmd, n_cmd);
 	tmp[n_cmd] = 0;
 	return (out);
@@ -36,7 +37,7 @@ static size_t		fn_number(register t_main_42sh *array)
 	return (count);
 }
 
-void			*ft_42sh_dsp_err_script(register t_main_42sh *array,
+void				*ft_42sh_dsp_err_script(register t_main_42sh *array,
 register void *msg, register void *cmd, register size_t n_cmd)
 {
 	register size_t						n_msg;
@@ -50,10 +51,12 @@ register void *msg, register void *cmd, register size_t n_cmd)
 	n_msg = ft_strlen(msg);
 	if (n_cmd == 0)
 		n_cmd = ft_strlen(cmd);
-	if ((out = malloc(n_msg + n_cmd + LEN_(WAR_42SH) + array->sh.count_path + count + LEN_(PRTF_RESET) + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
-	tmp = ft_memcpy(out, WAR_42SH, LEN_(WAR_42SH)) + LEN_(WAR_42SH);
-	tmp = ft_memcpy(tmp, array->sh.path, array->sh.count_path) + array->sh.count_path;
+	if ((out = ft_malloc(n_msg + n_cmd + sizeof(WAR_42SH) - 1
+	+ array->sh.count_path + count + sizeof(PRTF_RESET) - 1 + 1)) == 0)
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
+	tmp = ft_memcpy(out, WAR_42SH, sizeof(WAR_42SH) - 1) + sizeof(WAR_42SH) - 1;
+	tmp = ft_memcpy(tmp, array->sh.path, array->sh.count_path)
+	+ array->sh.count_path;
 	tmp = ft_memcpy(tmp, buff, count) + count;
 	tmp = ft_memcpy(tmp, msg, n_msg) + n_msg;
 	return (fn_finish(out, tmp, cmd, n_cmd));

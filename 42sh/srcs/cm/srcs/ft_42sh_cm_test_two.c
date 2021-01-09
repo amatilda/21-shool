@@ -20,7 +20,7 @@ static size_t	fn_test_fd(register unsigned char *str)
 
 	if (str == 0)
 	{
-		if (ioctl(STDOUT_FILENO, TIOCGETA, &tty) != 0)
+		if (ioctl(STDOUT_FILENO, TIOCGETA, &tty) == -1)
 			return (STATUS_FALTURE_42SH);
 		return (STATUS_OK_42SH);
 	}
@@ -29,7 +29,7 @@ static size_t	fn_test_fd(register unsigned char *str)
 		str++;
 	if (litter != 0)
 		return (STATUS_FALTURE_42SH);
-	if (ioctl(ft_atoi((void *)tmp), TIOCGETA, &tty) != 0)
+	if (ioctl(ft_atoi((void *)tmp), TIOCGETA, &tty) == -1)
 		return (STATUS_FALTURE_42SH);
 	return (STATUS_OK_42SH);
 }

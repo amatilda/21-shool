@@ -12,17 +12,17 @@
 
 #include "../includes/ft_42sh_init.h"
 
-static void		fn_while(void)
+static void		fn_while(register int dup_fd)
 {
 	register int		fd;
 
 	while (0xFF)
 	{
-		if ((fd = dup(STDIN_FILENO)) == -1)
-			ft_42sh_exit(E_DUP_CODE_42SH);
-		if (fd == PIPE_MAX_SUPPORT_FD_42SH)
+		if ((fd = dup(dup_fd)) == -1)
+			ft_42sh_exit(E_DUP_CODE_42SH, __FILE__, __func__, __LINE__);
+		if (fd == FD_MAX_SUPPORT_42SH)
 			break ;
-		else if (fd > PIPE_MAX_SUPPORT_FD_42SH)
+		else if (fd > FD_MAX_SUPPORT_42SH)
 		{
 			close(fd);
 			break ;
@@ -30,37 +30,18 @@ static void		fn_while(void)
 	}
 }
 
-static void		fn_close(register int fd)
-{
-	close(fd);
-	if (open("./", O_RDONLY) == -1)
-		ft_42sh_exit(E_DUP_CODE_42SH);
-	if (fd == STDERR_FILENO)
-		return ;
-	if ((fd = dup(STDIN_FILENO)) == -1)
-		ft_42sh_exit(E_DUP_CODE_42SH);
-	close(fd);
-	if (fd > STDERR_FILENO)
-		return ;
-	if (open("./", O_RDONLY) == -1)
-		ft_42sh_exit(E_DUP_CODE_42SH);
-}
-
-void			ft_42sh_init_fd(register t_main_42sh *array)
+void			ft_42sh_init_fd(void)
 {
 	register int		fd;
 
-	if ((fd = dup(STDIN_FILENO)) == -1)
-		ft_42sh_exit(E_DUP_CODE_42SH);
-	if (fd == PIPE_MAX_SUPPORT_FD_42SH)
+	if ((fd = open("./", O_RDONLY)) == -1)
+		ft_42sh_exit(E_DUP_CODE_42SH, __FILE__, __func__, __LINE__);
+	if (fd == FD_MAX_SUPPORT_42SH)
 		return ;
-	else if (fd > PIPE_MAX_SUPPORT_FD_42SH)
+	else if (fd > FD_MAX_SUPPORT_42SH)
 	{
 		close(fd);
 		return ;
 	}
-	else if (fd <= STDERR_FILENO)
-		fn_close(fd);
-	fn_while();
-	array->fd = dup(STDIN_FILENO);
+	fn_while(fd);
 }

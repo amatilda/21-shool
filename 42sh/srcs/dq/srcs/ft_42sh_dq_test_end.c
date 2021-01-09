@@ -40,8 +40,11 @@ t_dq_test_in_42sh *in, unsigned char **out, register unsigned char *e)
 		b = ft_42sh_parsing_litter_e_f_l(b, e);
 		b = ft_42sh_parsing_sp(b, e);
 		if (ft_42sh_parsing_litter_e_f(b, e) == 0)
-			return (ft_42sh_dq_test_err_n(array, MSG_SINTAX_ERROR_42SH, save, b - save));
-		if ((tempos = (size_t)ft_42sh_dq_test_word(array, b, e)) < (size_t)b)
+		{
+			return (ft_42sh_dq_test_err_n(array,
+			MSG_SINTAX_ERROR_42SH, save, b - save));
+		}
+		if ((tempos = (size_t)ft_42sh_dq_test_word(array, b, e, 0)) < (size_t)b)
 			return ((unsigned char)tempos);
 	}
 	else if (tempos == '\n')

@@ -61,10 +61,10 @@ register t_jobs_42sh *jobs)
 	ft_42sh_jobs_msg(array, jobs, fn_flag(array, jobs, b_test));
 	fn_corection(jobs, b_test);
 	ft_write_buffer(&array->out);
-	if (ioctl(array->fd, TIOCSETA, &array->tty) == -1)
-		ft_42sh_exit(E_IOTL_CODE_42SH);
-	if (ioctl(array->fd, TIOCSPGRP, &jobs->pid_view) == -1)
-		ft_42sh_exit(E_IOTL_CODE_42SH);
+	if (ft_42sh_stub_ioctl(array, TIOCSETA, &array->tty) == -1)
+		ft_42sh_exit(E_IOTL_CODE_42SH, __FILE__, __func__, __LINE__);
+	if (ft_42sh_stub_ioctl(array, TIOCSPGRP, &jobs->pid_view) == -1)
+		ft_42sh_exit(E_IOTL_CODE_42SH, __FILE__, __func__, __LINE__);
 	if ((b_test & AUTO_TYPE_RUN_42SH) == 0)
 		ft_42sh_cm_jobs_killgrp(jobs, SIGCONT);
 	ft_42sh_exe_wait(array, jobs, last);
@@ -77,7 +77,10 @@ register char **lp_arg)
 	register t_jobs_42sh		*jobs;
 
 	if ((array->b_location & LOCATION_FORK_42SH) != 0)
-		return (ft_42sh_dsp_err_msg(array, MSG_FG_NOT_CONT_42SH));
+	{
+		return (ft_42sh_dsp_err_msg(array,
+		WAR_42SH""MSG_FG_NOT_CONT_TXT_42SH""PRTF_RESET));
+	}
 	if ((str = (void *)lp_arg[0]) == 0)
 	{
 		ft_42sh_jobs_set_current(array);

@@ -12,6 +12,17 @@
 
 #include "includes/ft_42sh_auto.h"
 
+static void				fn_set(register t_all_cmd_42sh *out,
+register char add_litter)
+{
+	out->std.lp_key = out->key;
+	out->add_litter = add_litter;
+	out->count_cmd = 0;
+	out->b_type = 0;
+	out->std.next = 0;
+	out->std.prev = 0;
+}
+
 t_all_cmd_42sh			*ft_42sh_auto_list_create(register t_main_42sh *array,
 register char *key, register char add_litter)
 {
@@ -30,15 +41,10 @@ register char *key, register char add_litter)
 				key_count++;
 	}
 	if ((out = ft_malloc(sizeof(t_all_cmd_42sh) + key_count)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	out->std.key_count = key_count - 1;
-	out->std.lp_key = out->key;
 	out->std.key_litter = key_litter;
-	out->add_litter = add_litter;
-	out->count_cmd = 0;
-	out->b_type = 0;
-	out->std.next = 0;
-	out->std.prev = 0;
+	fn_set(out, add_litter);
 	key_litter += add_litter != 0 ? 1 : 0;
 	array->lp_auto->max_litter = key_litter > array->lp_auto->max_litter ?
 	key_litter : array->lp_auto->max_litter;
@@ -54,7 +60,8 @@ register char *lp_key, char add_litter)
 	register t_all_cmd_42sh		*list;
 	register void				*tmp;
 
-	tmp = ft_42sh_str_shield((void*)lp_key, (void*)lp_key + ft_strlen(lp_key), SHIELD_EXTERNALLY, 0);
+	tmp = ft_42sh_str_shield((void*)lp_key, (void*)lp_key +
+	ft_strlen(lp_key), SHIELD_EXTERNALLY, 0);
 	root = &array->lp_auto->all_cmd;
 	list = ft_42sh_auto_list_create(array, tmp, add_litter);
 	ft_free(tmp);

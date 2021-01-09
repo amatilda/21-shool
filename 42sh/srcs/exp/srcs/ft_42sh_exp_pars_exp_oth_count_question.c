@@ -14,17 +14,22 @@
 
 static size_t	fn_set_null(register t_replase_in_42sh *in)
 {
-	register unsigned char 			*msg;
+	register unsigned char			*msg;
 
-	if ((msg = ft_malloc(LEN_(MSG_EXP_QUEST_ERR_42SH) + LEN_(MSG_EXP_QUEST_NOT_SET_42SH) + in->exp.key_count + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+	if ((msg =
+	ft_malloc(sizeof(WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET)
+	- 1 + sizeof(WAR_42SH""MSG_EXP_QUEST_NOT_SET_TXT_42SH""PRTF_RESET) -
+	1 + in->exp.key_count + 1)) == 0)
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	in->array->pr.exit_pars.lp = msg;
-	ft_memcpy(msg, MSG_EXP_QUEST_ERR_42SH, LEN_(MSG_EXP_QUEST_ERR_42SH));
-	msg += LEN_(MSG_EXP_QUEST_ERR_42SH);
+	ft_memcpy(msg, WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET,
+	sizeof(WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET) - 1);
+	msg += sizeof(WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET) - 1;
 	ft_memcpy(msg, in->exp.key, in->exp.key_count);
 	msg += in->exp.key_count;
-	ft_memcpy(msg, MSG_EXP_QUEST_NOT_SET_42SH, LEN_(MSG_EXP_QUEST_NOT_SET_42SH));
-	msg[LEN_(MSG_EXP_QUEST_NOT_SET_42SH)] = 0;
+	ft_memcpy(msg, WAR_42SH""MSG_EXP_QUEST_NOT_SET_TXT_42SH""PRTF_RESET,
+	sizeof(WAR_42SH""MSG_EXP_QUEST_NOT_SET_TXT_42SH""PRTF_RESET) - 1);
+	msg[sizeof(WAR_42SH""MSG_EXP_QUEST_NOT_SET_TXT_42SH""PRTF_RESET) - 1] = 0;
 	in->array->pr.exit_pars.error = STATUS_FALTURE_42SH;
 	return (0);
 }
@@ -32,13 +37,16 @@ static size_t	fn_set_null(register t_replase_in_42sh *in)
 static size_t	fn_set(register t_replase_in_42sh *in,
 register unsigned char *b, register size_t count)
 {
-	register unsigned char 			*msg;
+	register unsigned char			*msg;
 
-	if ((msg = ft_malloc(LEN_(MSG_EXP_QUEST_ERR_42SH) + count + in->exp.key_count + 1 + 2)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+	if ((msg =
+	ft_malloc(sizeof(WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET)
+	- 1 + count + in->exp.key_count + 1 + 2)) == 0)
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	in->array->pr.exit_pars.lp = msg;
-	ft_memcpy(msg, MSG_EXP_QUEST_ERR_42SH, LEN_(MSG_EXP_QUEST_ERR_42SH));
-	msg += LEN_(MSG_EXP_QUEST_ERR_42SH);
+	ft_memcpy(msg, WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET,
+	sizeof(WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET) - 1);
+	msg += sizeof(WAR_42SH""MSG_EXP_QUEST_ERR_TXT_42SH""PRTF_RESET) - 1;
 	ft_memcpy(msg, in->exp.key, in->exp.key_count);
 	msg += in->exp.key_count;
 	msg++[0] = ':';
@@ -55,8 +63,8 @@ register unsigned char *end)
 {
 	register size_t					count;
 	register t_env_42sh				*list;
-	register unsigned char 			*b;
-	register unsigned char 			*e;
+	register unsigned char			*b;
+	register unsigned char			*e;
 
 	b = *src;
 	ft_42sh_exp_pars_exp_skip(src, end);

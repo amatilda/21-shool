@@ -59,8 +59,8 @@ unsigned char **out, register unsigned char *e, register unsigned char litter)
 			*out = b;
 			return (0);
 		}
-		else if (litter == '$' )
-			if ((litter = ft_42sh_dq_test_dq_exp(array, &b, e)) != 0)
+		else if (litter == '$')
+			if ((litter = ft_42sh_dq_test_dq_exp(array, &b, e, 0)) != 0)
 				return (litter);
 	}
 	*out = b;

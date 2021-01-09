@@ -15,24 +15,46 @@
 
 # include "ft_42sh.h"
 
-size_t			ft_42sh_replase_home_test(register unsigned char *start,
-register unsigned char *b);
-size_t			ft_42sh_replase_home_count(register t_main_42sh *array,
-register unsigned char **out, register unsigned char *e);
-void			*ft_42sh_replase_home(register t_main_42sh *array,
-register unsigned char *dest, register unsigned char **out,
+typedef struct		s_replase_in
+{
+	unsigned char	*s;
+	size_t			exps_loop;
+}					t_replase_in;
+
+size_t				ft_42sh_replase_home_test(register t_main_42sh *array,
+register unsigned char *start, register unsigned char *b,
 register unsigned char *e);
-size_t			ft_42sh_replase_slesh_count(unsigned char **out,
+size_t				ft_42sh_replase_home_count(register t_main_42sh *array,
+register unsigned char **out);
+void				*ft_42sh_replase_home(register t_main_42sh *array,
+register unsigned char *dest, register unsigned char **out);
+size_t				ft_42sh_replase_slesh_count(unsigned char **out,
 register unsigned char *e);
-void			*ft_42sh_replase_slesh(register unsigned char *dest,
+void				*ft_42sh_replase_slesh(register unsigned char *dest,
 unsigned char **out, register unsigned char *e);
-size_t			ft_42sh_replase_quotes_one_count(register
+size_t				ft_42sh_replase_slesh_exp_count(unsigned char **out,
+register unsigned char *e);
+void				*ft_42sh_replase_slesh_exp(register unsigned char *dest,
+unsigned char **out, register unsigned char *e);
+size_t				ft_42sh_replase_quotes_one_count(register
 t_replase_in_42sh *in, register unsigned char **out);
-unsigned char	*ft_42sh_replase_quotes_one(register
+unsigned char		*ft_42sh_replase_quotes_one(register
 t_replase_in_42sh *in, register unsigned char *dest, unsigned char **src);
-size_t			ft_42sh_replase_quotes_two_count(register t_replase_in_42sh *in,
-register unsigned char **out, register unsigned char *e);
-unsigned char	*ft_42sh_replase_quotes_two(register t_replase_in_42sh *in,
+size_t				ft_42sh_replase_quotes_two_count(register
+t_replase_in_42sh *in, register unsigned char **out,
+register unsigned char *e);
+unsigned char		*ft_42sh_replase_quotes_two(register t_replase_in_42sh *in,
 register unsigned char *dest, unsigned char **src, register unsigned char *e);
+
+size_t				ft_42sh_replase_add_tilda(register t_replase_in_42sh *in,
+register unsigned char *start, register unsigned char *b,
+register unsigned char *e);
+void				ft_42sh_replase_add_finish(register t_replase_in_42sh *in,
+size_t exps_loop);
+size_t				ft_42sh_replase_add_test(register t_replase_in_42sh *in,
+unsigned char **dest, unsigned char *b, register unsigned char lit);
+
+size_t				ft_42sh_replase_hrdc_test_dq(unsigned char **out,
+register unsigned char *e);
 
 #endif

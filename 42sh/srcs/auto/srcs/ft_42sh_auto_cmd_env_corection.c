@@ -12,7 +12,7 @@
 
 #include "../includes/ft_42sh_auto.h"
 
-static size_t	fn_test(register unsigned char *b,
+static size_t		fn_test(register unsigned char *b,
 register unsigned char *e)
 {
 	register unsigned char			litter;
@@ -23,7 +23,8 @@ register unsigned char *e)
 		return (1);
 	else if (litter == '=')
 		return (1);
-	else if (litter == ':' && b < e && ((litter = b[0]) == '?' || litter == '+' ||
+	else if (litter == ':' && b < e &&
+	((litter = b[0]) == '?' || litter == '+' ||
 	litter == '=' || litter == '-'))
 		return (1);
 	return (0);
@@ -56,10 +57,7 @@ register t_in_42sh *list, register unsigned char *b, register size_t n)
 	if ((litter = b[0]) == '#')
 		b++;
 	e = (void *)list->lp_current;
-	if (b < e && b[0] == '?')
-		tmp = b + 1;
-	else
-		tmp = ft_42sh_exp_test_exp_auto(b, e);
+	tmp = ft_42sh_exp_name_special(b, e);
 	if (litter == '#')
 		return (fn_len(array, tmp, b, e));
 	if (tmp < e && tmp[0] == '}')

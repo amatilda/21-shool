@@ -21,7 +21,7 @@ void					ft_42sh_list_in_dup(register t_in_42sh *list)
 		return ;
 	max = list->max;
 	if ((dup = ft_malloc(max)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_memcpy(dup, list->lp_b, list->count);
 	list->lp_b_dup = dup;
 	list->max_dup = max;

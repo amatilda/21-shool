@@ -19,7 +19,7 @@ register void *msg, register void *cmd, uint_fast8_t error)
 
 	jobs = array->pr.jb.last;
 	if ((array->b_location & LOCATION_SCRIPT_42SH) != 0)
-		jobs->path = ft_42sh_dsp_err_script(array ,msg, cmd, 0);
+		jobs->path = ft_42sh_dsp_err_script(array, msg, cmd, 0);
 	else
 		jobs->path = ft_42sh_dsp_err_standart(msg, cmd, 0);
 	jobs->b_type = jobs->b_type | AUTO_TYPE_ERROR_42SH;
@@ -33,7 +33,7 @@ register void *msg, register void *cmd, register size_t n)
 
 	jobs = array->pr.jb.last;
 	if ((array->b_location & LOCATION_SCRIPT_42SH) != 0)
-		jobs->path = ft_42sh_dsp_err_script(array ,msg, cmd, n);
+		jobs->path = ft_42sh_dsp_err_script(array, msg, cmd, n);
 	else
 		jobs->path = ft_42sh_dsp_err_standart(msg, cmd, n);
 	jobs->b_type = jobs->b_type | AUTO_TYPE_ERROR_42SH;

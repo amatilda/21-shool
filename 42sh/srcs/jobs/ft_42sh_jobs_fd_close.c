@@ -46,7 +46,7 @@ uint_fast8_t b_pipe_close)
 	pipe = &jobs->pipe[0];
 	while (count-- > 0)
 	{
-		if ((fd = pipe->fd_2) > PIPE_MAX_SUPPORT_FD_42SH)
+		if ((fd = pipe->fd_2) > FD_MAX_SUPPORT_42SH)
 		{
 			pipe->fd_2 = 0;
 			close(fd);

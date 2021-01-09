@@ -35,7 +35,7 @@ register t_in_42sh *list, register uintmax_t litter, register size_t count)
 		return ;
 	if (litter == KEY_INT_42SH)
 		ft_42sh_key_int(array, list);
-	else if (litter == KEY_ENTER_42SH)
+	else if (litter == KEY_ENTER_42SH || litter == KEY_ENTER2_42SH)
 		ft_42sh_dq(array, list);
 	else if (litter == KEY_UP_42SH)
 		ft_42sh_key_up(array, list);
@@ -58,6 +58,31 @@ register t_in_42sh *list, register uintmax_t litter, register size_t count)
 static void		fn_test_key(register t_main_42sh *array,
 register t_in_42sh *list, register uintmax_t litter, register size_t count)
 {
+	ft_42sh_dsp_clear_auto(array, list);
+	ft_42sh_auto_toogle(array);
+	if (litter == KEY_SELECT_LEFT_42SH)
+		ft_42sh_select_left(array, list);
+	else if (litter == KEY_SELECT_RIGHT_42SH)
+		ft_42sh_select_right(array, list);
+	else if (litter == KEY_STR_DELETE_42SH)
+		ft_42sh_key_str_delete(array, list);
+	else if (litter == KEY_STR_COPY_42SH)
+		ft_42sh_key_str_copy(array, list);
+	else if (litter == KEY_STR_PASTE_42SH)
+		ft_42sh_key_str_paste(array, list);
+	else if (litter == KEY_STR_CUT_42SH)
+		ft_42sh_key_str_cut(array, list);
+	else if (litter == KEY_DELETE_42SH)
+		ft_42sh_key_delete(array, list);
+	else if (litter == KEY_BACKSPACE_42SH)
+		ft_42sh_key_backspace(array, list);
+	else
+		fn_test_key_add(array, list, litter, count);
+}
+
+static void		fn_test_key_pre(register t_main_42sh *array,
+register t_in_42sh *list, register uintmax_t litter, register size_t count)
+{
 	if (array->b_quest_exit != 0)
 		ft_42sh_jobs_exit_clear(array, list, litter);
 	else if (litter == KEY_TAB_42SH && array->lp_auto->b_auto != 0 &&
@@ -66,29 +91,7 @@ register t_in_42sh *list, register uintmax_t litter, register size_t count)
 	else if (array->lp_auto->b_limit != 0 || litter == KEY_TAB_42SH)
 		ft_42sh_key_tab(array, list);
 	else
-	{
-		array->lp_auto->b_auto = 0;
-		ft_42sh_dsp_clear_auto(array, list);
-		ft_42sh_auto_toogle(array);
-		if (litter == KEY_SELECT_LEFT_42SH)
-			ft_42sh_select_left(array, list);
-		else if (litter == KEY_SELECT_RIGHT_42SH)
-			ft_42sh_select_right(array, list);
-		else if (litter == KEY_STR_DELETE_42SH)
-			ft_42sh_key_str_delete(array, list);
-		else if (litter == KEY_STR_COPY_42SH)
-			ft_42sh_key_str_copy(array, list);
-		else if (litter == KEY_STR_PASTE_42SH)
-			ft_42sh_key_str_paste(array, list);
-		else if (litter == KEY_STR_CUT_42SH)
-			ft_42sh_key_str_cut(array, list);
-		else if (litter == KEY_DELETE_42SH)
-			ft_42sh_key_delete(array, list);
-		else if (litter == KEY_BACKSPACE_42SH)
-			ft_42sh_key_backspace(array, list);
-		else
-			fn_test_key_add(array, list, litter, count);
-	}
+		fn_test_key(array, list, litter, count);
 }
 
 void			ft_42sh_read(register t_main_42sh *array)
@@ -100,20 +103,20 @@ void			ft_42sh_read(register t_main_42sh *array)
 	while (0xFF)
 	{
 		array->litter[0] = 0;
-		count = read(array->fd, &array->litter, sizeof(array->litter));
+		count = read(FD_TERMINAL_42SH, &array->litter, sizeof(array->litter));
 		if ((ssize_t)count == -1)
-			ft_42sh_exit(E_READ_CODE_42SH);
+			ft_42sh_exit(E_READ_CODE_42SH, __FILE__, __func__, __LINE__);
 		if (array->b_read != 0)
 		{
 			array->b_read = 0;
 			array->tty_change.c_cc[VMIN] = 1;
 			array->tty_change.c_cc[VTIME] = 0;
-			if (ioctl(array->fd, TIOCSETA, &array->tty_change) == -1)
-				ft_42sh_exit(E_IOTL_CODE_42SH);
+			if (ft_42sh_stub_ioctl(array, TIOCSETA, &array->tty_change) == -1)
+				ft_42sh_exit(E_IOTL_CODE_42SH, __FILE__, __func__, __LINE__);
 		}
 		if (count == 0)
 			continue ;
-		fn_test_key(array, array->in.in_current, array->litter[0], count);
+		fn_test_key_pre(array, array->in.in_current, array->litter[0], count);
 		ft_write_buffer(&array->out);
 	}
 }

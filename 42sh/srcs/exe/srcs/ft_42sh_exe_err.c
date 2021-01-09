@@ -12,7 +12,7 @@
 
 #include "../includes/ft_42sh_exe.h"
 
-void				ft_42sh_exe_err(register t_main_42sh *array,
+void			ft_42sh_exe_err(register t_main_42sh *array,
 register char **lp_arg)
 {
 	ft_42sh_dsp_err_msg(array, (void *)lp_arg);
@@ -21,7 +21,7 @@ register char **lp_arg)
 size_t			ft_42sh_exe_err_foor(register t_main_42sh *array,
 register t_jobs_42sh *jobs)
 {
-	ft_42sh_dsp_err_msg(array, MSG_FOOR_42SH);
+	ft_42sh_dsp_err_msg(array, WAR_PR_42SH""MSG_FOOR_TXT_42SH""PRTF_RESET);
 	jobs->stat_loc = STATUS_FALTURE_42SH;
 	return (0);
 }

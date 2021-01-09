@@ -42,17 +42,22 @@ register char *cmd, register char *cmd_add)
 	return (0);
 }
 
+static t_all_cmd_42sh	**fn_return(register t_main_42sh *array,
+register char *cmd)
+{
+	ft_42sh_jobs_set_err(array, MSG_EXE_NOT_42SH, cmd,
+	STATUS_NOT_FIN_CMD_42SH);
+	ft_free(cmd);
+	return (0);
+}
+
 static t_all_cmd_42sh	**fn_test_cmd_next(register t_main_42sh *array,
 register t_all_cmd_42sh **spl, register char *cmd)
 {
 	register size_t		b_type;
 
 	if (((b_type = spl[0]->b_type) & AUTO_TYPE_ALIAS_42SH) != 0)
-	{
-		ft_42sh_jobs_set_err(array, MSG_EXE_NOT_42SH, cmd, STATUS_NOT_FIN_CMD_42SH);
-		ft_free(cmd);
-		return (0);
-	}
+		return (fn_return(array, cmd));
 	if ((b_type & AUTO_TYPE_HASH_42SH) != 0)
 	{
 		if (fn_exe_availability(array, spl[0]->path_hash, cmd) == 0)
@@ -75,7 +80,6 @@ register t_all_cmd_42sh **spl, register char *cmd)
 	return (spl);
 }
 
-
 static t_all_cmd_42sh	**fn_test_cmd(register t_main_42sh *array,
 register char *cmd, register size_t n)
 {
@@ -83,12 +87,15 @@ register char *cmd, register size_t n)
 	register void					*tmp;
 	t_shield_out_42sh				lp;
 
-	tmp = ft_42sh_str_shield((void *)cmd, (void *)cmd + n, SHIELD_EXTERNALLY, &lp);
+	tmp = ft_42sh_str_shield((void *)cmd, (void *)cmd + n,
+	SHIELD_EXTERNALLY, &lp);
 	if ((spl =
 	(t_all_cmd_42sh **)ft_42sh_spl_find((void **)array->lp_auto->spl_all_cmd,
-	array->lp_auto->count_all, tmp, lp.count)) == 0 || spl[0]->std.key_count != lp.count)
+	array->lp_auto->count_all, tmp, lp.count)) == 0 ||
+	spl[0]->std.key_count != lp.count)
 	{
-		ft_42sh_jobs_set_err(array, MSG_EXE_NOT_CMD_42SH, cmd, STATUS_NOT_FIN_CMD_42SH);
+		ft_42sh_jobs_set_err(array, MSG_EXE_NOT_CMD_42SH, cmd,
+		STATUS_NOT_FIN_CMD_42SH);
 		ft_free(tmp);
 		ft_free(cmd);
 		return (0);
@@ -103,16 +110,17 @@ register char *cmd, register size_t n)
 	return (fn_test_cmd_next(array, spl, cmd));
 }
 
-size_t				ft_42sh_parsing_while_availability(
+size_t					ft_42sh_parsing_while_availability(
 register t_main_42sh *array, register t_jobs_42sh *jobs,
-register unsigned char *b, register size_t n)
+register unsigned char *b, size_t n)
 {
 	register t_all_cmd_42sh			**spl;
 
 	spl = 0;
 	if (n == 0)
 	{
-		ft_42sh_jobs_set_err(array, MSG_EXE_DEFINE_42SH, b, STATUS_DEFINED_CMD_42SH);
+		ft_42sh_jobs_set_err(array, MSG_EXE_DEFINE_42SH, b,
+		STATUS_DEFINED_CMD_42SH);
 		ft_free(b);
 		return (0);
 	}

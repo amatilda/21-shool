@@ -29,5 +29,7 @@ void	ft_42sh_unalias(register t_main_42sh *array,
 		register char **lp_arg);
 size_t	ft_42sh_alias_pars_name_error(size_t i, char *arg,
 		char *tmp_arg, register t_main_42sh *array);
+void	ft_42sh_alias_pars_dsp_write_v(t_main_42sh *array,
+register t_pguitar_alias_42sh *list);
 
 #endif

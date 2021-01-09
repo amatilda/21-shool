@@ -24,7 +24,7 @@ register t_in_42sh *dest, register t_in_42sh *src)
 	count_dest = dest->count;
 	max = (count_src + count_dest + 2 + BUFFER_READ_42SH) & -BUFFER_READ_42SH;
 	if ((lp_b = ft_malloc(max)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	dest->max = max;
 	max = (size_t)dest->lp_b;
 	ft_memcpy(lp_b, (char *)max, count_dest);

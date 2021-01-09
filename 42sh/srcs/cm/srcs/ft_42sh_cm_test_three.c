@@ -15,8 +15,9 @@
 static size_t	fn_stub_eq(t_test_number_42sh *in_fr,
 t_test_number_42sh *in_tw)
 {
-	if ((in_fr->sig != 0 && in_tw->sig == 0) ||
-	(in_fr->sig == in_tw->sig && ft_strcmp(in_fr->lp, in_tw->lp) <= 0))
+	if ((in_fr->sig != 0 && in_tw->sig == 0) || (in_fr->sig == in_tw->sig &&
+		(in_fr->n < in_tw->n || (in_fr->n == in_tw->n &&
+		ft_strcmp(in_fr->lp, in_tw->lp) <= 0))))
 		return (STATUS_OK_42SH);
 	return (STATUS_FALTURE_42SH);
 }
@@ -40,8 +41,9 @@ register unsigned char *two)
 	}
 	if (fr == 'g')
 	{
-		if ((in_fr.sig == 0 && in_tw.sig != 0) ||
-		(in_fr.sig == in_tw.sig && ft_strcmp(in_fr.lp, in_tw.lp) >= 0))
+		if ((in_fr.sig == 0 && in_tw.sig != 0) || (in_fr.sig == in_tw.sig &&
+		(in_fr.n > in_tw.n || (in_fr.n == in_tw.n &&
+		ft_strcmp(in_fr.lp, in_tw.lp) >= 0))))
 			return (STATUS_OK_42SH);
 		return (STATUS_FALTURE_42SH);
 	}
@@ -63,15 +65,17 @@ register unsigned char *two)
 		return (STATUS_REZERVED_42SH);
 	if ((fr = eq[1]) == 'g')
 	{
-		if ((in_fr.sig == 0 && in_tw.sig != 0) ||
-		(in_fr.sig == in_tw.sig && ft_strcmp(in_fr.lp, in_tw.lp) > 0))
+		if ((in_fr.sig == 0 && in_tw.sig != 0) || (in_fr.sig == in_tw.sig &&
+		(in_fr.n > in_tw.n || (in_fr.n == in_tw.n &&
+		ft_strcmp(in_fr.lp, in_tw.lp) > 0))))
 			return (STATUS_OK_42SH);
 		return (STATUS_FALTURE_42SH);
 	}
 	if (fr == 'l')
 	{
-		if ((in_fr.sig != 0 && in_tw.sig == 0) ||
-		(in_fr.sig == in_tw.sig && ft_strcmp(in_fr.lp, in_tw.lp) < 0))
+		if ((in_fr.sig != 0 && in_tw.sig == 0) || (in_fr.sig == in_tw.sig &&
+		(in_fr.n < in_tw.n || (in_fr.n == in_tw.n &&
+		ft_strcmp(in_fr.lp, in_tw.lp) < 0))))
 			return (STATUS_OK_42SH);
 		return (STATUS_FALTURE_42SH);
 	}
@@ -89,10 +93,7 @@ register unsigned char *two)
 
 	fr = eq[0];
 	if (fr != '-' || (fr = eq[1]) == 0 || eq[2] == 0 || eq[3] != 0)
-	{
-		ft_42sh_dsp_err_msg_add_n(array, MSG_TEST_COND_42SH, (void *)eq, 0);
-		return (STATUS_REZERVED_42SH);
-	}
+		return (ft_42sh_cm_test_three_err_unk_not(array, eq));
 	if ((tw = eq[2]) == 'e')
 		return (fn_test_eq(array, first, eq, two));
 	if (tw == 't')

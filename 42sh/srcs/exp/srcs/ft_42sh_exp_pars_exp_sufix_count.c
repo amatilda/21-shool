@@ -16,7 +16,7 @@ static void			*fn_str(register t_env_42sh *list, char *buff)
 {
 	if ((list->b_type & EXP_TYPE_NUMBER_42SH) == 0)
 		return (list->lp_value);
-	ft_itoa(buff, list->number, 10, ITOA_LOWER);
+	ft_itoa(buff, list->number, 10, ITOA_LOWER | ITOA_SIGNED);
 	return (buff);
 }
 
@@ -35,14 +35,17 @@ static size_t		fn_one(register unsigned char *cmp,
 register unsigned char *cmp_end, register unsigned char *pattern,
 register unsigned char *pattern_end)
 {
-	register unsigned char 			*tmp;
+	register unsigned char			*tmp;
 
 	if (pattern == pattern_end)
 		return (cmp_end - cmp);
 	tmp = cmp_end;
 	while (tmp > cmp)
-		if (ft_42sh_pattern(--tmp, cmp_end, pattern, pattern_end) != 0)
+	{
+		tmp -= ft_strlen_utf8_litter(tmp - 1);
+		if (ft_42sh_pattern(tmp, cmp_end, pattern, pattern_end) != 0)
 			return (tmp - cmp);
+	}
 	return (cmp_end - cmp);
 }
 
@@ -50,7 +53,7 @@ static size_t		fn_two(register unsigned char *cmp,
 register unsigned char *cmp_end, register unsigned char *pattern,
 register unsigned char *pattern_end)
 {
-	register unsigned char 			*tmp;
+	register unsigned char			*tmp;
 
 	if (pattern == pattern_end)
 		return (cmp_end - cmp);
@@ -59,7 +62,7 @@ register unsigned char *pattern_end)
 	{
 		if (ft_42sh_pattern(tmp, cmp_end, pattern, pattern_end) != 0)
 			return (tmp - cmp);
-		tmp++;
+		tmp += ft_strlen_utf8_litter(tmp);
 	}
 	return (cmp_end - cmp);
 }
@@ -69,8 +72,8 @@ t_replase_in_42sh *in, unsigned char **s, unsigned char **src,
 register unsigned char *end)
 {
 	register size_t					count;
-	register unsigned char 			*out;
-	register unsigned char 			*cmp;
+	register unsigned char			*out;
+	register unsigned char			*cmp;
 	uint_fast8_t					b_test;
 	t_exp_in_exp_42sh				ptr;
 
@@ -84,7 +87,7 @@ register unsigned char *end)
 	ptr.start = *src;
 	ptr.count = ft_42sh_replase_exp_count(in, &ptr.start, src, end);
 	if ((out = ft_malloc(ptr.count)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_42sh_replase_exp(in, out, ptr.start, end);
 	end = cmp + count;
 	if (b_test == 0)

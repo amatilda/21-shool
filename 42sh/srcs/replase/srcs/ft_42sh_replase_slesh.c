@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_42sh_replase_slesh2.c                            :+:      :+:    :+:   */
+/*   ft_42sh_replase_slesh2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amatilda <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -43,6 +43,34 @@ unsigned char **src, register unsigned char *e)
 		b += 2;
 	else
 		dest++[0] = b++[0];
+	*src = b;
+	return (dest);
+}
+
+size_t			ft_42sh_replase_slesh_exp_count(unsigned char **out,
+register unsigned char *e)
+{
+	register unsigned char			*b;
+
+	b = *out;
+	if (b + 1 < e && b[1] == '\n')
+		b += 2;
+	else
+		b++;
+	*out = b;
+	return (2);
+}
+
+void			*ft_42sh_replase_slesh_exp(register unsigned char *dest,
+unsigned char **src, register unsigned char *e)
+{
+	register unsigned char			*b;
+
+	b = *src;
+	if (b + 1 < e && b[1] == '\n')
+		b++;
+	dest++[0] = '\\';
+	dest++[0] = b++[0];
 	*src = b;
 	return (dest);
 }

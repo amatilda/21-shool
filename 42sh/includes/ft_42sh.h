@@ -29,15 +29,34 @@
 # include "ft_42sh_struct.h"
 # include "pguitar/ft_42sh_pguitar.h"
 
+void			*ft_42sh_glb(register t_main_42sh *array,
+register const char *src);
+char			**ft_42sh_glb_args_parser(register t_main_42sh *array,
+register char **args, register size_t count);
+void			*ft_42sh_glb_parser(register t_main_42sh *array,
+register unsigned char *b, size_t *n);
+size_t			ft_42sh_glb_auto_cmd(register t_main_42sh *array,
+register t_in_42sh *list, register unsigned char *str, register size_t n);
+void			ft_42sh_glb_auto_other(register t_main_42sh *array,
+register t_in_42sh *list, register char *start, register char *end);
+
+size_t			ft_42sh_calc_test(register t_main_42sh *array,
+unsigned char **out, register unsigned char *e);
+size_t			ft_42sh_calc_count(t_replase_in_42sh *in_rep,
+unsigned char **s, unsigned char **out, register unsigned char *e);
+void			*ft_42sh_calc(t_replase_in_42sh *in_rep,
+register unsigned char *dest, unsigned char **out, register unsigned char *e);
+
 void			ft_42sh_auto_create(register t_main_42sh *array);
 void			*ft_42sh_auto_cmd_expension(register t_main_42sh *array,
-register unsigned char *b, register unsigned char *e);
+register unsigned char *b, register unsigned char *e, register size_t b_test);
 void			ft_42sh_auto_create_array(register t_main_42sh *array,
 register t_all_cmd_42sh *list, register size_t count);
 void			*ft_42sh_auto_add_list(register t_main_42sh *array,
 register char *lp_key, char add_litter);
 void			ft_42sh_auto_free_list(register t_all_cmd_42sh *list);
 void			ft_42sh_auto_free_all_cmd(register t_main_42sh *array);
+void			ft_42sh_auto_free_all_cmd_full(register t_main_42sh *array);
 void			ft_42sh_auto_toogle(register t_main_42sh *array);
 void			ft_42sh_auto_cmd(register t_main_42sh *array,
 register t_in_42sh *list, register unsigned char *str, register size_t n);
@@ -58,9 +77,11 @@ register char *lp_key, register void *str, uint_fast8_t b_type);
 void			ft_42sh_dsp_start(register t_main_42sh *array);
 void			ft_42sh_dsp_err_msg(register t_main_42sh *array,
 register char *str);
-uintmax_t		ft_42sh_dsp_position(register t_main_42sh *array);
+uintmax_t		ft_42sh_dsp_position(void);
 void			ft_42sh_dsp_err_msg_add_n(register t_main_42sh *array,
 register void *str, register void *add, register size_t n);
+void			ft_42sh_dsp_err_msg_adds(register t_main_42sh *array,
+register char *str, register void *add, register void *adds);
 void			ft_42sh_dsp_raw(register t_main_42sh *array,
 register size_t raw);
 void			ft_42sh_dsp_data(register t_main_42sh *array,
@@ -81,8 +102,8 @@ void			ft_42sh_dsp_clear_select(register t_main_42sh *array,
 register t_in_42sh *list);
 void			*ft_42sh_dsp_err_script(register t_main_42sh *array,
 register void *msg, register void *cmd, register size_t n_cmd);
-void			*ft_42sh_dsp_err_standart(register void *msg, register void *cmd,
-register size_t n_cmd);
+void			*ft_42sh_dsp_err_standart(register void *msg,
+register void *cmd, register size_t n_cmd);
 
 void			ft_42sh_dq(register t_main_42sh *array,
 register t_in_42sh *list);
@@ -92,7 +113,7 @@ register unsigned char *e);
 unsigned char	ft_42sh_dq_test_sintax(register t_main_42sh *array,
 unsigned char **out, register unsigned char *e);
 unsigned char	*ft_42sh_dq_test_word(register t_main_42sh *array,
-unsigned char *b, register unsigned char *e);;
+unsigned char *b, register unsigned char *e, register uint_fast8_t b_test);
 void			ft_42sh_dq_skip_dq(unsigned char **out,
 register unsigned char *e, register unsigned char lit);
 unsigned char	ft_42sh_dq_test_hrdc(register t_main_42sh *array,
@@ -171,10 +192,6 @@ register unsigned char *dest, unsigned char **src,
 register unsigned char *end);
 void			*ft_42sh_exp_test_exp(register unsigned char *b,
 register unsigned char *e);
-void			*ft_42sh_exp_test_exp_auto(register unsigned char *b,
-register unsigned char *e);
-void			*ft_42sh_exp_test_name_arith(register unsigned char *b,
-register unsigned char *e);
 t_env_42sh		*ft_42sh_exp_add(register t_main_42sh *array,
 register unsigned char *key, register unsigned char *key_end,
 register t_add_exp_42sh *in);
@@ -184,13 +201,16 @@ void			ft_42sh_exp_start(register t_main_42sh *array,
 register char **env);
 void			*ft_42sh_exp_name(register unsigned char *b,
 register unsigned char *e);
+void			*ft_42sh_exp_name_special(register unsigned char *b,
+register unsigned char *e);
 size_t			ft_42sh_exp_shield(register unsigned char *value,
 register unsigned char *value_e);
+void			ft_42sh_exp_corection(register t_replase_in_42sh *in);
 
 void			ft_42sh_init(register t_main_42sh *array, register int argc,
 register char **argv, register char **env);
 void			ft_42sh_init_script(register t_main_42sh *array,
-register char **env);
+register char **env, register char **lp_arg);
 
 t_in_42sh		*ft_42sh_list_in_create(register t_main_42sh *array,
 register size_t max);
@@ -199,6 +219,7 @@ register t_in_42sh *list);
 t_in_42sh		*ft_42sh_list_in_create_dup_full(register t_main_42sh *array,
 register t_in_42sh *list);
 void			ft_42sh_list_in_free(register t_in_42sh *list);
+void			ft_42sh_list_in_free_all(register t_main_42sh *array);
 void			ft_42sh_list_in_default(register t_main_42sh *array,
 register t_in_42sh *list);
 void			ft_42sh_list_in_last(register t_main_42sh *array);
@@ -222,10 +243,6 @@ size_t			ft_42sh_exe(register t_main_42sh *array,
 register size_t b_test);
 size_t			ft_42sh_exe_wait(register t_main_42sh *array,
 register t_jobs_42sh *jobs, t_jobs_42sh *jobs_cl);
-void			ft_42sh_exe_grup(register t_main_42sh *array,
-register t_jobs_42sh *jobs, register pid_t pid);
-void			ft_42sh_exe_grup_child(register t_main_42sh *array,
-register t_jobs_42sh *jobs);
 
 void			ft_42sh_cm_exit(register t_main_42sh *array,
 register char **lp_arg);
@@ -305,6 +322,8 @@ void			ft_42sh_path_canon(register t_string *ret,
 register unsigned char *str, register size_t n);
 void			ft_42sh_path_view(register t_main_42sh *array,
 register unsigned char *b, register unsigned char *e);
+void			ft_42sh_path_logins(register t_main_42sh *array);
+void			ft_42sh_path_logins_list_free(register t_main_42sh *array);
 
 size_t			ft_42sh_pipe_pre(register t_main_42sh *array,
 register t_in_42sh *list, unsigned char *out, register unsigned char *end);
@@ -322,15 +341,23 @@ size_t			ft_42sh_pipe_test_fd(register t_main_42sh *array,
 register int fd);
 size_t			ft_42sh_pipe_test_fd_dsp(register t_main_42sh *array,
 register int fd, void *name);
+void			ft_42sh_pipe_find(register t_main_42sh *array,
+register t_jobs_42sh *jobs, register int *fds, register int fd);
+size_t			ft_42sh_pipe_find_count(register t_pipe_42sh *pipe_b,
+register t_pipe_42sh *pipe_e, register int fd);
 
+void			ft_42sh_replase_hrdc_name(register t_main_42sh *array,
+register unsigned char *dest, unsigned char *b, register unsigned char *e);
+size_t			ft_42sh_replase_hrdc_name_count(register t_main_42sh *array,
+unsigned char **out, register unsigned char *e);
+size_t			ft_42sh_replase_hrdc_count(register t_main_42sh *array,
+unsigned char *b, register unsigned char *e);
 void			ft_42sh_replase_hrdc(register t_main_42sh *array,
 register unsigned char *dest, unsigned char *b, register unsigned char *e);
-size_t			ft_42sh_replase_hrdc_count(register t_main_42sh *array,
-unsigned char **out, register unsigned char *e);
 void			ft_42sh_replase_skip(register t_main_42sh *array,
 unsigned char **out, register unsigned char *e);
 void			ft_42sh_replase(register t_replase_in_42sh *in,
-register unsigned char *dest, unsigned char *b, register unsigned char *e);
+unsigned char *dest, unsigned char *b, register unsigned char *e);
 size_t			ft_42sh_replase_count(register t_replase_in_42sh *in,
 unsigned char **s, unsigned char **out, register unsigned char *e);
 void			ft_42sh_replase_exp(register t_replase_in_42sh *in,
@@ -338,9 +365,11 @@ register unsigned char *dest, unsigned char *b, register unsigned char *e);
 size_t			ft_42sh_replase_exp_count(register t_replase_in_42sh *in,
 unsigned char **s, unsigned char **out, register unsigned char *e);
 
-void			ft_42sh_signal_initilization_script(register t_main_42sh *array);
+void			ft_42sh_signal_initilization_script(register
+t_main_42sh *array);
 void			ft_42sh_signal_initilization(register t_main_42sh *array);
-void			ft_42sh_signal_default(void);
+void			ft_42sh_signal_default(register t_main_42sh *array,
+register t_jobs_42sh *jobs);
 
 void			ft_42sh_str(register t_main_42sh *array,
 register t_in_42sh *list, register unsigned char *litter,
@@ -356,6 +385,9 @@ register t_in_42sh *list);
 void			ft_42sh_str_full_end(register t_main_42sh *array,
 register t_in_42sh *list);
 void			*ft_42sh_str_shield(register unsigned char *b,
+register unsigned char *e, register uint_fast8_t b_test,
+register t_shield_out_42sh *lp);
+void			*ft_42sh_str_shield_(register unsigned char *b,
 register unsigned char *e, register uint_fast8_t b_test,
 register t_shield_out_42sh *lp);
 
@@ -391,7 +423,7 @@ void			ft_42sh_jobs_exit_clear(register t_main_42sh *array,
 register t_in_42sh *list, register uintmax_t litter);
 
 void			ft_42sh_sh(register t_main_42sh *array,
-register unsigned char *path, register char **env_spl);
+register t_jobs_42sh *jobs, register char **env_spl, register char **lp_arg);
 void			*ft_42sh_sh_comment(register t_main_42sh *array,
 register unsigned char *b, register unsigned char *e);
 
@@ -400,7 +432,19 @@ register unsigned char litter, unsigned char litter_prev);
 void			ft_42sh_read(register t_main_42sh *array);
 void			**ft_42sh_spl_find(register void **spl,
 register size_t max_spl, register char *str, register size_t n);
-void			ft_42sh_stop(register t_main_42sh *array);
-void			ft_42sh_exit(register size_t exit_code);
+void			ft_42sh_exit(register size_t exit_code,
+register void *name_file, register const char *name_function,
+register size_t line);
+void			ft_42sh_free_exit(register t_main_42sh *array);
+void			ft_42sh_free_script(register t_main_42sh *array);
+int				ft_42sh_stub_ioctl(register t_main_42sh *array,
+register unsigned long number, register void *lp);
+
+void			ft_42sh_task_init(register t_main_42sh *array,
+int argc, char **argv);
+void			ft_42sh_task_delete(register t_main_42sh *array);
+void			ft_42sh_task_add_bultin(register t_main_42sh *array,
+void (*f)(register t_main_42sh *array,
+register char *lp_key, register void *str, uint_fast8_t b_type));
 
 #endif

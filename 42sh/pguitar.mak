@@ -5,9 +5,11 @@ PGUITAR		= 	auto/pguitar/ft_42sh_auto_comp.c\
                 auto/pguitar/ft_42sh_auto_comp_check_fill.c\
                 auto/pguitar/ft_42sh_auto_comp_addfiles_cmp.c\
                 auto/pguitar/ft_42sh_auto_comp_dollar.c\
-                arith/ft_42sh_arith.c\
+                auto/pguitar/ft_42sh_auto_comp_exp.c\
+                auto/pguitar/ft_42sh_auto_comp_pars_dir_tilda.c\
                 alias/ft_42sh_alias.c\
                 alias/ft_42sh_alias_un.c\
+                alias/ft_42sh_alias_free.c\
                 alias/srcs/ft_42sh_alias_create_list.c\
                 alias/srcs/ft_42sh_alias_pars.c\
                 alias/srcs/ft_42sh_alias_file.c\

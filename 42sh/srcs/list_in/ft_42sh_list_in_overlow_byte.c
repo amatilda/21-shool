@@ -61,7 +61,7 @@ register size_t n_org)
 		return (fn_offset(list, rep, b, n_org));
 	list->max = tempos;
 	if ((new = ft_malloc(tempos)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	old = list->lp_b;
 	list->lp_b = new;
 	ft_memcpy(new, old, (tempos = (char *)b - old));

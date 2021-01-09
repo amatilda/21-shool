@@ -33,29 +33,35 @@ static char	**fn_set(void)
 void		ft_42sh_signal_initilization_script(register t_main_42sh *array)
 {
 	array->pr.lp_msg_sgnl = fn_set();
+	if ((array->b_mode & MODE_SIGCHILD_42SH) != 0)
+		signal(SIGCHLD, ft_42sh_signal_child);
 }
 
 void		ft_42sh_signal_initilization(register t_main_42sh *array)
 {
 	array->pr.lp_msg_sgnl = fn_set();
-	signal(SIGTERM, ft_42sh_signal_term);
 	signal(SIGWINCH, ft_42sh_signal_winch);
-
+	if ((array->b_mode & MODE_SIGCHILD_42SH) != 0)
+		signal(SIGCHLD, ft_42sh_signal_child);
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
 }
 
-void		ft_42sh_signal_default(void)
+void		ft_42sh_signal_default(register t_main_42sh *array,
+register t_jobs_42sh *jobs)
 {
-	signal(SIGTERM, SIG_DFL);
 	signal(SIGWINCH, SIG_DFL);
-	signal(SIGCHLD, SIG_DFL);
+	if ((array->b_mode & MODE_SIGCHILD_42SH) != 0)
+		signal(SIGCHLD, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
+	signal(SIGTERM, SIG_DFL);
+	(void)jobs;
 }

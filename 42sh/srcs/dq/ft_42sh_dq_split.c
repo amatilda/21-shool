@@ -17,7 +17,7 @@ static t_slesh_42sh	*fn_set_spl(register size_t n, register size_t count)
 	register t_slesh_42sh		*spl_slesh;
 
 	if ((spl_slesh = ft_malloc(sizeof(t_slesh_42sh))) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	spl_slesh->count = n;
 	spl_slesh->count_litter = count;
 	return (spl_slesh);
@@ -57,7 +57,7 @@ register size_t count)
 
 	list->slesh_max = count;
 	if ((lp_out = ft_malloc((count + 1 + 1) * sizeof(t_slesh_42sh **))) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	lp_out[count + 1] = 0;
 	list->spl_slesh = lp_out;
 	b = list->lp_b;

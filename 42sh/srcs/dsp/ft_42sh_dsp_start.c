@@ -21,6 +21,7 @@ void		ft_42sh_dsp_start(register t_main_42sh *array)
 	ft_write_buffer_str_zero(out, (void *)array->pwd.path_view);
 	ft_write_buffer_str_zero(out, "\n"PRTF_RESET);
 	ft_write_buffer_str_zero(out, array->msg.pre_msg);
-	if (array->msg.pre_msg_litter % array->ws.ws_col == 0)
+	if ((array->b_location & LOCATION_SCRIPT_42SH) == 0 &&
+	array->msg.pre_msg_litter % array->ws.ws_col == 0)
 		ft_write_buffer_str_zero(out, " \xD");
 }

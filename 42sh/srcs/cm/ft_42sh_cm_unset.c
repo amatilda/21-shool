@@ -26,7 +26,8 @@ register char **lp_arg, register t_past_sort_42sh *root)
 			continue ;
 		if ((list->b_type & EXP_TYPE_R_ONLY_42SH) != 0)
 		{
-			ft_42sh_dsp_err_msg_add_n(array, MSG_UNSET_R_ONLY_42SH,
+			ft_42sh_dsp_err_msg_add_n(array,
+			WAR_42SH""MSG_UNSET_R_ONLY_TXT_42SH""PRTF_RESET,
 			list->std.lp_key, list->std.key_count);
 			continue ;
 		}
@@ -46,10 +47,14 @@ register char **lp_arg)
 		if ((litter = str[0]) == 0 || (litter == '-' && str[1] == 0))
 			break ;
 		str++;
-		return (ft_42sh_dsp_err_msg_add_n(array, MSG_BAD_OPTION_42SH,
-		(void *)str - 1, ft_strlen_utf8_litter(str[-1])));
+		return (ft_42sh_dsp_err_msg_add_n(array,
+		WAR_PR_42SH""MSG_BAD_OPTION_TXT_42SH""PRTF_RESET"-",
+		(void *)str - 1, ft_strlen_utf8_litter(str - 1)));
 	}
 	if (lp_arg[0] == 0)
-		return (ft_42sh_dsp_err_msg(array, MSG_UNSET_NOT_ARG_42SH));
+	{
+		return (ft_42sh_dsp_err_msg(array,
+		WAR_42SH""MSG_UNSET_NOT_ARG_TXT_42SH""PRTF_RESET));
+	}
 	fn_while(array, lp_arg, &array->env.root);
 }

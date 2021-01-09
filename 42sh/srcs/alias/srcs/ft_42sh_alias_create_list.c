@@ -23,8 +23,9 @@ register t_pguitar_alias_42sh *next, register t_main_42sh *array)
 	if (!(arg = ft_42sh_alias_pars_name(*lp_arg, &n_cnt, array)))
 		return (NULL);
 	arg = ft_42sh_alias_pars_value(array, arg, &v_cnt);
-	if ((list = malloc(sizeof(t_pguitar_alias_42sh) + n_cnt + v_cnt + 2)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+	if ((list = ft_malloc(sizeof(t_pguitar_alias_42sh) + n_cnt
+	+ v_cnt + 2)) == 0)
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	list->n_cnt = n_cnt;
 	list->v_cnt = v_cnt;
 	list->name = list->lp;
@@ -54,7 +55,7 @@ register t_pguitar_alias_42sh **list, register t_main_42sh *array, size_t i)
 	if (array->pguitar.f_modif.file == 1)
 		array->pguitar.f_modif.modif = 1;
 	tmp_next = (*list)->next;
-	free(*list);
+	ft_free(*list);
 	*list = NULL;
 	list_tmp = ft_42sh_alias_create_list(lp_arg, tmp_next, array);
 	if (i)

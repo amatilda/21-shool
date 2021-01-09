@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char		*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*out;
 	size_t	count1;
@@ -35,5 +35,18 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[0] != 0)
 		out[count1++] = s2++[0];
 	out[count1] = 0;
+	return (out);
+}
+
+void		*ft_strnjoin(register const void *s1, register size_t n1,
+register const void *s2, register size_t n2)
+{
+	register unsigned char		*out;
+
+	if ((out = ft_malloc(n1 + n2 + 1)) == 0)
+		return (0);
+	ft_memcpy(out, s1, n1);
+	ft_memcpy(out + n1, s2, n2);
+	out[n1 + n2] = 0;
 	return (out);
 }

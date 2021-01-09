@@ -42,10 +42,15 @@ register t_pipe_in_42sh *in)
 	return (ft_42sh_pipe_pre_pipe(jobs, &jobs->pipe[0]));
 }
 
-static size_t		fn_finish(register t_jobs_42sh *jobs,
-register t_pipe_42sh *pipe)
+static size_t		fn_finish(register t_main_42sh *array,
+register t_jobs_42sh *jobs, register t_pipe_42sh *pipe)
 {
-	ft_42sh_pipe_pre_and_right(jobs, &jobs->pipe[0], pipe);
+	if (ft_42sh_pipe_pre_and_right(jobs, &jobs->pipe[0], pipe) == 0)
+	{
+		ft_42sh_jobs_set_err(array, MSG_PIPE_LIMIT_FD_42SH,
+		"", STATUS_FALTURE_42SH);
+		return (0);
+	}
 	return (1);
 }
 
@@ -54,7 +59,6 @@ register t_in_42sh *list, unsigned char *out, register unsigned char *end)
 {
 	register t_pipe_42sh			*pipe;
 	register unsigned char			*b;
-	register size_t					litter;
 	t_pipe_in_42sh					in;
 
 	in.list = list;
@@ -67,9 +71,9 @@ register t_in_42sh *list, unsigned char *out, register unsigned char *end)
 		else
 		{
 			array->sh.lp_cmd = out;
-			if ((litter = ft_42sh_pipe_pre_set(array, pipe, &out, &in)) == 0)
+			if ((in.litter = ft_42sh_pipe_pre_set(array, pipe, &out, &in)) == 0)
 				return (0);
-			else if (litter == PIPE_42SH)
+			else if (in.litter == PIPE_42SH)
 				break ;
 			if (ft_42sh_pipe_pre_finish(array, array->pr.jb.last,
 			pipe, pipe->b_flag) == 0)
@@ -77,5 +81,5 @@ register t_in_42sh *list, unsigned char *out, register unsigned char *end)
 			pipe++;
 		}
 	}
-	return (fn_finish(array->pr.jb.last, pipe));
+	return (fn_finish(array, array->pr.jb.last, pipe));
 }

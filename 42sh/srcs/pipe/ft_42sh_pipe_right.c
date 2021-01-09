@@ -69,19 +69,21 @@ register t_jobs_42sh *jobs, register int fd, t_pipe_search_in_42sh *in)
 {
 	register pid_t			pid;
 
+	if (ft_42sh_pipe_find_count(&jobs->pipe[0], &jobs->pipe[jobs->n], fd) == 1)
+		return (1);
 	if ((pid = fork()) == 0)
 	{
-		ft_42sh_signal_default();
-		ft_42sh_exe_grup_child(array, jobs);
-		ft_42sh_pipe_close_fd_right(jobs);
-		close(array->fd);
-		fn_while(&jobs->pipe[jobs->n], fd, jobs->fds[(fd << 1) + PIPE_READ_42SH],
-		in);
+		ft_42sh_signal_default(array, jobs);
+		setpgid(0, array->pr.pid_fork);
+		ft_42sh_pipe_close_fd_right(array, jobs);
+		ft_42sh_jobs_fd_close_future(jobs);
+		fn_while(&jobs->pipe[jobs->n], fd,
+		jobs->fds[(fd << 1) + PIPE_READ_42SH], in);
 		ft_42sh_cm_exit_fun(array, E_CODE_42SH);
 	}
 	else if (pid < 0)
 		return (0);
-	ft_42sh_exe_grup(array, jobs, pid);
+	setpgid(pid, array->pr.pid_fork);
 	jobs->pipe_pid[fd] = pid;
 	return (1);
 }
@@ -96,6 +98,7 @@ register t_jobs_42sh *jobs)
 	count = jobs->b_fd_right;
 	fd = 0;
 	jobs->b_pipe_fd |= count;
+	in.array = array;
 	in.pipe = &jobs->pipe[0];
 	in.b = array->buff_out;
 	in.b_fd_right = jobs->b_fd_right;

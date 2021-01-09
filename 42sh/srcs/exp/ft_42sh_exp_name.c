@@ -12,11 +12,14 @@
 
 #include "includes/ft_42sh_exp.h"
 
-void				*ft_42sh_exp_name(register unsigned char *b,
+void			*ft_42sh_exp_name(register unsigned char *b,
 register unsigned char *e)
 {
 	register uintmax_t				out;
+	register unsigned char			litter;
 
+	if (b == e || ((litter = b[0]) >= 0x30 && litter <= 0x39))
+		return (b);
 	while (b < e)
 	{
 		if (b[0] == '_')
@@ -30,4 +33,29 @@ register unsigned char *e)
 		b += out >> (sizeof(uintmax_t) * 8 / 2);
 	}
 	return (b);
+}
+
+void			*ft_42sh_exp_name_special(register unsigned char *b,
+register unsigned char *e)
+{
+	register unsigned char			litter;
+
+	if (b == e)
+		return (b);
+	if ((litter = b[0]) == '?' || litter == '$' || litter == '!')
+		return (b + 1);
+	return (ft_42sh_exp_name(b, e));
+}
+
+void			*ft_42sh_exp_test_exp(register unsigned char *b,
+register unsigned char *e)
+{
+	register unsigned char			*tmp;
+
+	tmp = ft_42sh_exp_name(b, e);
+	if (tmp == e)
+		return (0);
+	if (b[0] == '=' || tmp[0] != '=')
+		return (0);
+	return (tmp + 1);
 }

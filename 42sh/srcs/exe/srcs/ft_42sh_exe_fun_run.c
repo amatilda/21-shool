@@ -60,5 +60,5 @@ void (*f)(register t_main_42sh *array, register char **lp_arg))
 		(1 << STDERR_FILENO));
 		array->err.fd = STDERR_FILENO;
 	}
-	array->out.fd = STDIN_FILENO;
+	array->out.fd = FD_TERMINAL_42SH;
 }

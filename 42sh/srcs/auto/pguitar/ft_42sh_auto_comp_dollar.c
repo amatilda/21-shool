@@ -12,6 +12,21 @@
 
 #include "include/ft_42sh_auto_comp.h"
 
+size_t			ft_42sh_auto_comp_pars_dir_tilda_slash(register
+t_main_42sh *array, size_t i)
+{
+	if (!(array->home.lp_home))
+		return (1);
+	array->pguitar.comp.str += i + 1;
+	array->pguitar.comp.count_str -= i + 1;
+	array->pguitar.comp.str = ft_strjoin(array->home.lp_home,
+	array->pguitar.comp.str);
+	free(array->pguitar.comp.str_dup);
+	array->pguitar.comp.str_dup = array->pguitar.comp.str;
+	array->pguitar.comp.count_str += ft_strlen(array->home.lp_home);
+	return (0);
+}
+
 static void		ft_42sh_auto_comp_pars_dol_cycle(char **tmp_cur, size_t *i,
 				register t_main_42sh *array, register char **end)
 {

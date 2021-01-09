@@ -34,15 +34,16 @@ register unsigned char *out, register unsigned char *e)
 
 static void	*fn_cmd_view_correction(register t_replase_in_42sh *in,
 register t_exp_set_42sh *exp_set, register unsigned char *e,
-register size_t count)
+size_t count)
 {
 	register unsigned char			*out;
 
 	if ((out = ft_malloc(count + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	out[count] = 0;
 	fn_write(exp_set, out, e);
 	ft_free(exp_set);
+	out = ft_42sh_glb_parser(in->array, out, &count);
 	if ((ft_42sh_parsing_while_availability(in->array, in->prs.jobs,
 	out, count)) == 0)
 		return (0);
@@ -50,7 +51,7 @@ register size_t count)
 }
 
 static void	*fn_cmd_view(register t_replase_in_42sh *in,
-register t_exp_set_42sh *exp_set, register size_t count)
+register t_exp_set_42sh *exp_set, size_t count)
 {
 	register unsigned char			*b;
 	register unsigned char			*e;
@@ -65,6 +66,7 @@ register t_exp_set_42sh *exp_set, register size_t count)
 	if (save == count)
 	{
 		ft_memcpy(exp_set, exp_set->lp, count + 1);
+		exp_set = ft_42sh_glb_parser(in->array, (void *)exp_set, &count);
 		if ((ft_42sh_parsing_while_availability(in->array, in->prs.jobs,
 		(void *)exp_set, count)) == 0)
 			return (0);
@@ -85,7 +87,7 @@ static void	*fn_ret(register t_replase_in_42sh *in)
 	if (in->prs.pipe_count == 0)
 		return (0);
 	if ((cmd = ft_strndup("cat", 3)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	if ((ft_42sh_parsing_while_availability(in->array, in->prs.jobs,
 	cmd, 3)) == 0)
 		return (0);
@@ -96,6 +98,7 @@ void		*ft_42sh_parsing_cmd_ret(register t_replase_in_42sh *in,
 unsigned char **out, register t_exp_set_42sh *exp_set, register size_t count)
 {
 	register unsigned char			*cmd;
+	register unsigned char			*save;
 
 	in->array->sh.lp_cmd = in->prs.start;
 	if (in->prs.start == *out)
@@ -107,14 +110,15 @@ unsigned char **out, register t_exp_set_42sh *exp_set, register size_t count)
 		if (ft_42sh_parsing_litter_e_f(*out, in->prs.e) == 0)
 			return (fn_ret(in));
 		in->prs.start = *out;
+		save = *out;
 		count = ft_42sh_replase_count(in, &in->prs.start, out, in->prs.e);
 		if (in->array->pr.exit_pars.lp != 0)
 			return (0);
 		if ((exp_set = ft_malloc(sizeof(t_exp_set_42sh) + count + 1)) == 0)
-			ft_42sh_exit(E_MEM_CODE_42SH);
+			ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 		cmd = exp_set->lp;
 		cmd[count] = 0;
-		ft_42sh_replase(in, cmd, in->prs.start, in->prs.e);
+		ft_42sh_replase(in, cmd, save, in->prs.e);
 		return (ft_42sh_parsing_cmd_ret(in, out, exp_set, count));
 	}
 	return (fn_cmd_view(in, exp_set, count));

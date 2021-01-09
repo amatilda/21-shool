@@ -32,7 +32,7 @@ register t_in_42sh *list, register unsigned char *b, register size_t count)
 	register void				*out;
 
 	if ((out = ft_malloc(count)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_memcpy(out, b, count);
 	ft_42sh_dsp_clear_select(array, list);
 	array->slc.lp_clipboard = out;

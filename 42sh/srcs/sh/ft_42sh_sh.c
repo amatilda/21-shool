@@ -12,29 +12,30 @@
 
 #include "includes/ft_42sh_sh.h"
 
-static void		*fn_path(register t_main_42sh *array,
-register unsigned char *path)
+static void		*fn_set(register t_main_42sh *array,
+register t_jobs_42sh *jobs, register char **lp_arg)
 {
-	register size_t					count;
+	register unsigned char		*path;
+	register char				**tmp;
 
-	count =  ft_strlen((void *)path);
+	jobs->lp_arg = 0;
+	if ((tmp = array->sh.lp_arg) != 0)
+		ft_strsplit_free(tmp);
+	path = (void *)lp_arg[0];
 	array->sh.path = path;
-	if ((array->sh.path = ft_strndup((void *)path, count)) == 0)
-		ft_42sh_sh_exit(ft_42sh_sh_exit_zero_crit(array,
-		MSG_SH_INVALID_MEMORY_42SH), STATUS_FALTURE_42SH);
-	array->sh.count_path = count;
+	array->sh.count_path = ft_strlen((void *)path);
+	array->sh.lp_arg = lp_arg;
 	return (path);
 }
 
 void			ft_42sh_sh(register t_main_42sh *array,
-register unsigned char *path, register char **env_spl)
+register t_jobs_42sh *jobs, register char **env_spl, register char **lp_arg)
 {
 	register unsigned char		*b;
 	register t_in_42sh			*list;
 	register size_t				count;
 
-	path = fn_path(array, path);
-	list = ft_42sh_sh_get(array, env_spl, path);
+	list = ft_42sh_sh_get(array, env_spl, fn_set(array, jobs, lp_arg), lp_arg);
 	b = array->sh.lp_sh;
 	ft_42sh_sh_standart(array, list, b, array->sh.lp_sh_e);
 	ft_free(b);

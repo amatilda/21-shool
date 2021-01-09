@@ -19,6 +19,8 @@ int			main(int argc, char **argv, char **env)
 	static t_main_42sh		array;
 
 	g_lp_array = &array;
+	array.b_mode = MODE_LAUNCH_42SH | MODE_VALG_42SH |
+	MODE_GUARD_42SH | MODE_SIGCHILD_42SH;
 	ft_42sh_init(&array, argc, argv, env);
 	ft_42sh_read(&array);
 	return (0);

@@ -22,14 +22,16 @@ register t_in_42sh *list, register unsigned char *str, register size_t n)
 	{
 		str += count;
 		n = n - count;
-		ft_42sh_dsp_caret_right(array, list, ft_42sh_parsing_litter_n((char *)str,
+		ft_42sh_dsp_caret_right(array, list,
+		ft_42sh_parsing_litter_n((char *)str,
 		(char *)(str + n)), n);
 	}
 	else if (count > n)
 	{
 		str += n;
 		n = count - n;
-		ft_42sh_dsp_caret_left(array, list, ft_42sh_parsing_litter_n((char *)str,
+		ft_42sh_dsp_caret_left(array, list,
+		ft_42sh_parsing_litter_n((char *)str,
 		(char *)(str + n)), n);
 	}
 }
@@ -88,6 +90,8 @@ register t_in_42sh *list, register unsigned char *str, register size_t n)
 	register t_all_cmd_42sh			*cmd;
 	register size_t					tempos;
 
+	if (ft_42sh_glb_auto_cmd(array, list, str, n) == 1)
+		return ;
 	n = ft_42sh_auto_cmd_env_corection(array, list, str, n);
 	if (array->env.offset_auto == 3)
 		str++;

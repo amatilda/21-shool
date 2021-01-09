@@ -49,12 +49,12 @@ register uint_fast8_t b_test)
 		if ((lit = b++[0]) == '\n')
 			dest = fn_n(dest, b_test);
 		else if (lit == '\'' || lit == '"' || lit == '$' || lit == '\\' ||
-		lit == ' ' || lit == '[' || lit == ']' || lit == '*'  || lit == '?')
+		lit == ' ' || lit == '[' || lit == ']' || lit == '*' || lit == '?')
 		{
 			dest++[0] = '\\';
 			dest++[0] = lit;
 		}
-		else 
+		else
 			dest++[0] = lit;
 	}
 }
@@ -68,7 +68,22 @@ register t_shield_out_42sh *lp)
 
 	count = ft_42sh_str_shield_count(b, e, b_test, lp);
 	if ((out = ft_malloc(count + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
+	out[count] = 0;
+	fn_replase(out, b, e, b_test);
+	return (out);
+}
+
+void			*ft_42sh_str_shield_(register unsigned char *b,
+register unsigned char *e, register uint_fast8_t b_test,
+register t_shield_out_42sh *lp)
+{
+	register size_t				count;
+	register unsigned char		*out;
+
+	count = ft_42sh_str_shield_count(b, e, b_test, lp);
+	if ((out = ft_malloc(count + 1)) == 0)
+		return (0);
 	out[count] = 0;
 	fn_replase(out, b, e, b_test);
 	return (out);

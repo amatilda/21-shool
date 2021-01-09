@@ -54,7 +54,7 @@ register unsigned char *end);
 size_t				ft_42sh_exp_pars_exp_oth_count_question(register
 t_replase_in_42sh *in, unsigned char **s, unsigned char **src,
 register unsigned char *end);
-unsigned char	*ft_42sh_exp_pars_exp_oth(register t_replase_in_42sh *in,
+unsigned char		*ft_42sh_exp_pars_exp_oth(register t_replase_in_42sh *in,
 register unsigned char *dest, unsigned char **src,
 register unsigned char *end);
 size_t				ft_42sh_exp_pars_exp_sufix_count(register
@@ -72,7 +72,19 @@ register unsigned char *end);
 void				*ft_42sh_exp_pars_exp_set(register t_replase_in_42sh *in,
 register unsigned char *dest, unsigned char **src,
 register unsigned char *end);
-void				ft_42sh_exp_pars_exp_set_count(register
-t_replase_in_42sh *in);
+size_t				ft_42sh_exp_pars_exp_set_count(register
+t_replase_in_42sh *in, unsigned char **s, unsigned char **src,
+register unsigned char *end);
+
+void				*ft_42sh_exp_pars_exp_prefix_add_str(register
+t_env_42sh *list, char *buff);
+void				*ft_42sh_exp_pars_exp_prefix_add_set(register
+t_replase_in_42sh *in, t_exp_in_exp_42sh *ptr, unsigned char **src,
+register unsigned char *end);
+void				*ft_42sh_exp_pars_exp_sufix_add_str(register
+t_env_42sh *list, char *buff);
+void				*ft_42sh_exp_pars_exp_sufix_add_set(register
+t_replase_in_42sh *in, t_exp_in_exp_42sh *ptr, unsigned char **src,
+register unsigned char *end);
 
 #endif

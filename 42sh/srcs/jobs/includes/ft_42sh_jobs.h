@@ -26,5 +26,6 @@ register t_write_buff *out, register t_jobs_42sh *jobs,
 register size_t b_test);
 void				ft_42sh_jobs_list_create_id(register t_main_42sh *array,
 register t_jobs_42sh *out, register size_t count);
+void				ft_42sh_jobs_free(register t_jobs_42sh *jobs);
 
 #endif

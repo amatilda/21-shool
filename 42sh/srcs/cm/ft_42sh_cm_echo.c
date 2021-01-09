@@ -75,7 +75,7 @@ register unsigned char *str)
 	return (1);
 }
 
-static void				fn_while(register t_write_buff *out,
+static size_t			fn_while(register t_write_buff *out,
 register char **lp_arg)
 {
 	register unsigned char	*str;
@@ -83,15 +83,16 @@ register char **lp_arg)
 	if ((str = (void *)lp_arg[0]) != 0)
 	{
 		if (fn_write(out, str) == 0)
-			return ;
+			return (0);
 		lp_arg++;
 	}
 	while ((str = (void *)lp_arg++[0]) != 0)
 	{
 		ft_write_buffer_str_zero(out, " ");
 		if (fn_write(out, str) == 0)
-			return ;
+			return (0);
 	}
+	return (1);
 }
 
 void					ft_42sh_cm_echo(register t_main_42sh *array,
@@ -111,7 +112,8 @@ register char **lp_arg)
 		b_n = 0;
 		lp_arg++;
 	}
-	fn_while(out, lp_arg);
+	if (fn_while(out, lp_arg) == 0)
+		return ;
 	if (b_n != 0)
 		ft_write_buffer_str_zero(out, "\n");
 }

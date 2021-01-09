@@ -23,7 +23,7 @@ static t_jobs_42sh	*fn_test(register t_main_42sh *array)
 	return (jobs->prev);
 }
 
-void			ft_42sh_jobs_set_current(register t_main_42sh *array)
+void				ft_42sh_jobs_set_current(register t_main_42sh *array)
 {
 	register size_t				count;
 	register t_jobs_42sh		*jobs;

@@ -19,10 +19,10 @@ register t_in_42sh *list)
 	register char		*lp_b;
 
 	if ((new = ft_malloc(sizeof(t_in_42sh))) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_memcpy(new, list, sizeof(t_in_42sh));
 	if ((lp_b = ft_malloc(list->max)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_memcpy(lp_b, list->lp_b, list->max);
 	new->lp_b = lp_b;
 	new->lp_current = lp_b + (list->lp_current - list->lp_b);

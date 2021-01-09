@@ -62,4 +62,3 @@ register unsigned char *e)
 		return (0);
 	return (litter);
 }
-

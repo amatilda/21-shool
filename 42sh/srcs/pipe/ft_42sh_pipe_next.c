@@ -21,7 +21,15 @@ register unsigned char *b, register unsigned char *end)
 	if ((litter = b[0]) == b[-1])
 		b++;
 	if (b[0] == '&')
+	{
 		b++;
+		if (b[0] == '-')
+		{
+			b++;
+			out = b;
+			return (out);
+		}
+	}
 	out = b;
 	ft_42sh_replase_skip(array, &out, end);
 	return (out);
@@ -42,7 +50,7 @@ unsigned char **out, register unsigned char *end)
 	b += tempos;
 	if (litter != '|')
 		b = fn_next(array, b, end);
-	*out = b;
+	*out = ft_42sh_parsing_sp(b, end);
 	return (tempos);
 }
 

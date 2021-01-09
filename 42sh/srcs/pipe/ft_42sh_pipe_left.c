@@ -21,25 +21,6 @@ register int fd_write, register int fd_read)
 		write(fd_write, buff, tempos);
 }
 
-static void		fn_to_hrdc(register t_pipe_42sh *pipe, register int fd_write)
-{
-	register t_slesh_42sh			**spl;
-	register t_slesh_42sh			**spl_end;
-	register char					*b;
-	register size_t					tempos;
-
-	spl = pipe->lp_heredok_spl;
-	spl_end = pipe->lp_heredok_spl_end;
-	b = pipe->lp_heredok_b;
-	while (spl < spl_end)
-	{
-		if ((tempos = spl++[0]->count) != 0)
-			write(fd_write, b, tempos);
-		write(fd_write, "\n", 1);
-		b += tempos + 2;
-	}
-}
-
 static void		fn_while(register t_pipe_42sh *pipe_end,
 register int fd, register int fd_write, register t_pipe_search_in_42sh *in)
 {
@@ -53,7 +34,7 @@ register int fd, register int fd_write, register t_pipe_search_in_42sh *in)
 		fd == pipe->fd_1)
 		{
 			if ((b_flag & (PIPE_LEFT2_42SH ^ PIPE_LEFT_42SH)) != 0)
-				fn_to_hrdc(pipe, fd_write);
+				ft_42sh_pipe_left_hrdc(in->array, pipe, fd_write);
 			else
 				fn_to_file(in->b, fd_write, pipe->fd_2);
 		}
@@ -66,19 +47,21 @@ register t_jobs_42sh *jobs, register int fd, t_pipe_search_in_42sh *in)
 {
 	register pid_t			pid;
 
+	if (ft_42sh_pipe_find_count(&jobs->pipe[0], &jobs->pipe[jobs->n], fd) == 1)
+		return (1);
 	if ((pid = fork()) == 0)
 	{
-		ft_42sh_signal_default();
-		ft_42sh_exe_grup_child(array, jobs);
-		ft_42sh_pipe_close_fd_left(jobs);
-		close(array->fd);
-		fn_while(&jobs->pipe[jobs->n], fd, jobs->fds[(fd << 1) + PIPE_WRITE_42SH],
-		in);
+		ft_42sh_signal_default(array, jobs);
+		setpgid(0, array->pr.pid_fork);
+		ft_42sh_pipe_close_fd_left(array, jobs);
+		ft_42sh_jobs_fd_close_future(jobs);
+		fn_while(&jobs->pipe[jobs->n], fd,
+		jobs->fds[(fd << 1) + PIPE_WRITE_42SH], in);
 		ft_42sh_cm_exit_fun(array, E_CODE_42SH);
 	}
 	else if (pid < 0)
 		return (0);
-	ft_42sh_exe_grup(array, jobs, pid);
+	setpgid(pid, array->pr.pid_fork);
 	jobs->pipe_pid[fd] = pid;
 	return (1);
 }
@@ -93,6 +76,7 @@ register t_jobs_42sh *jobs)
 	count = jobs->b_fd_left;
 	fd = 0;
 	jobs->b_pipe_fd |= count;
+	in.array = array;
 	in.pipe = &jobs->pipe[0];
 	in.b = array->buff_out;
 	in.b_fd_left = jobs->b_fd_left;

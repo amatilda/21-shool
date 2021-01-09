@@ -26,11 +26,11 @@ register t_all_cmd_42sh **spl, register void *cmd)
 		else if ((b_type & AUTO_TYPE_EXE_42SH) != 0)
 		{
 			if ((path = ft_42sh_path_join(spl[0]->path, cmd)) == 0)
-				ft_42sh_exit(E_MEM_CODE_42SH);
+				ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 		}
 		else if ((b_type & AUTO_TYPE_HASH_42SH) != 0)
 			if ((path = ft_strdup(spl[0]->path_hash)) == 0)
-				ft_42sh_exit(E_MEM_CODE_42SH);
+				ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	}
 	else
 		b_type = AUTO_TYPE_EXE_42SH;

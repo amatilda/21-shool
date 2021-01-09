@@ -14,19 +14,21 @@
 
 void		ft_42sh_init_terminal(register t_main_42sh *array)
 {
-	if (ioctl(STDIN_FILENO, TIOCGETA, &array->tty_change) != 0)
+	dup2(STDIN_FILENO, FD_TERMINAL_42SH);
+	if (ioctl(FD_TERMINAL_42SH, TIOCGETA, &array->tty_change) == -1)
 	{
-		write(STDERR_FILENO, E_CANON_42SH, LEN_(E_CANON_42SH));
+		write(STDERR_FILENO, CRIT_PR_42SH""E_CANON_TXT_42SH""PRTF_RESET,
+		sizeof(CRIT_PR_42SH""E_CANON_TXT_42SH""PRTF_RESET) - 1);
 		exit(E_CANNON_CODE_42SH);
 	}
-	array->tty = array->tty_change;
+	ft_memcpy(&array->tty, &array->tty_change, sizeof(array->tty_change));
 	array->tty_change.c_lflag &= ~(ICANON | ECHO | ISIG);
 	array->tty_change.c_cc[VMIN] = 1;
 	array->tty_change.c_cc[VTIME] = 0;
-	if (ioctl(STDIN_FILENO, TIOCSETA, &array->tty_change) != 0)
+	if (ioctl(FD_TERMINAL_42SH, TIOCSETA, &array->tty_change) == -1)
 	{
-		write(STDERR_FILENO, E_CANON_42SH, LEN_(E_CANON_42SH));
+		write(STDERR_FILENO, CRIT_PR_42SH""E_CANON_TXT_42SH""PRTF_RESET,
+		sizeof(CRIT_PR_42SH""E_CANON_TXT_42SH""PRTF_RESET) - 1);
 		exit(E_CANNON_CODE_42SH);
 	}
 }
-

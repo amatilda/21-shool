@@ -38,7 +38,6 @@ unsigned char **s, unsigned char **src, register unsigned char *end)
 {
 	register size_t					count;
 	register t_env_42sh				*list;
-	unsigned char					*start;
 
 	list = in->exp.env;
 	if (list != 0 && (count = ft_42sh_exp_parsing_value_count(in->array,
@@ -47,13 +46,7 @@ unsigned char **s, unsigned char **src, register unsigned char *end)
 		ft_42sh_exp_pars_exp_skip(src, end);
 		return (count);
 	}
-	start = *src;
-	if ((count = ft_42sh_replase_exp_count(in, &start, src, end)) == 0)
-	{
-		ft_42sh_exp_pars_exp_set_count(in);
-		*s = *src;
-	}
-	return (count);
+	return (ft_42sh_exp_pars_exp_set_count(in, s, src, end));
 }
 
 static size_t		fn_minus(register t_replase_in_42sh *in,

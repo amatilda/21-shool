@@ -19,20 +19,21 @@ register t_std_key_42sh *next)
 	if (next == 0)
 	{
 		prev->next = 0;
-		root->last = list;
+		root->last = prev;
 	}
 	else if (prev == 0)
 	{
-		prev = next;
 		next->prev = 0;
-		root->first = list;
+		root->first = next;
 	}
 	else
 	{
 		next->prev = prev;
 		prev->next = next;
 	}
-	root->center = root->center == list ? next : root->center;
+	if (root->center != list)
+		return ;
+	root->center = (next == 0) ? prev : next;
 }
 
 void			ft_42sh_list_cut(register t_past_sort_42sh *root,

@@ -21,7 +21,7 @@ register size_t n)
 
 	n_cnt = alias->n_cnt;
 	if ((list = ft_malloc(sizeof(t_alias_42sh) + n_cnt + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	if (array->dq.first_alias == 0)
 	{
 		array->dq.first_alias = list;
@@ -67,6 +67,14 @@ register size_t n)
 	ft_42sh_list_in_overlow_byte(list, &rep, b, n);
 }
 
+static size_t	fn_fiish(unsigned char **out, unsigned char **end,
+register t_in_42sh *list, register unsigned char *lp_b)
+{
+	*out = lp_b;
+	*end = lp_b + list->count;
+	return (0);
+}
+
 size_t			ft_42sh_dq_test_alias(register t_dq_test_in_42sh *in,
 unsigned char **out, unsigned char **end, register size_t n)
 {
@@ -89,9 +97,7 @@ unsigned char **out, unsigned char **end, register size_t n)
 			fn_paste(list, alias, b, n);
 			lp_b = (void *)list->lp_b;
 			in->start = lp_b;
-			*out = lp_b;
-			*end = lp_b + list->count;
-			return (0);
+			return (fn_fiish(out, end, list, lp_b));
 		}
 		alias = alias->next;
 	}

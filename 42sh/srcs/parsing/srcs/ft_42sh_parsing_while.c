@@ -47,6 +47,14 @@ register t_in_42sh *list, unsigned char **out, register unsigned char *e)
 	return (0);
 }
 
+static void			fn_set(register t_jobs_42sh *jobs,
+register unsigned char *cmd)
+{
+	ft_42sh_jobs_list_set_type(jobs,
+	(t_all_cmd_42sh **)jobs->path, cmd);
+	jobs->lp_arg = (char **)cmd;
+}
+
 void				ft_42sh_parsing_while(register t_main_42sh *array,
 register t_in_42sh *list, unsigned char *b, register unsigned char *e)
 {
@@ -60,10 +68,10 @@ register t_in_42sh *list, unsigned char *b, register unsigned char *e)
 		jobs = ft_42sh_jobs_create_add_list(array, b, e, ++count);
 		if ((cmd = ft_42sh_parsing_cmd(array, jobs, &b, e)) != 0)
 		{
-			if (ft_42sh_pipe_pre(array, list, array->pr.lp_cmd, e) != 0 && cmd != (unsigned char *)1)
+			if (ft_42sh_pipe_pre(array, list, array->pr.lp_cmd, e) != 0 &&
+			cmd != (unsigned char *)1)
 			{
-				ft_42sh_jobs_list_set_type(jobs, (t_all_cmd_42sh **)jobs->path, cmd);
-				jobs->lp_arg = (char **)cmd;
+				fn_set(jobs, cmd);
 				ft_42sh_parsing_arg(array, jobs, &b, e);
 			}
 			else if (cmd != (unsigned char *)1)

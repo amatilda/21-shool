@@ -22,7 +22,7 @@ void	ft_42sh_alias_pars_home(register t_main_42sh *array)
 		home = getlogin();
 		tmp = ft_strjoin("/Users/", home);
 		array->pguitar.f_modif.home = ft_strjoin(tmp, "/.42sh_am_pg");
-		free(tmp);
+		ft_free(tmp);
 	}
 }
 

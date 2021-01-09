@@ -64,7 +64,7 @@ unsigned char *b, register unsigned char *e, size_t n)
 	fd_pipe = fn_pipe(array->pr.jobs_last, &count);
 	tempos = sizeof(t_jobs_42sh) + (count * sizeof(t_pipe_42sh));
 	if ((out = ft_malloc(tempos)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_memset(out, 0, tempos);
 	fn_add_jobs(array, (array->pr.jb.first != 0 ? array->pr.jb.last : 0), out);
 	out->n = count;
@@ -73,4 +73,3 @@ unsigned char *b, register unsigned char *e, size_t n)
 	ft_42sh_jobs_list_create_id(array, out, n);
 	return (out);
 }
-

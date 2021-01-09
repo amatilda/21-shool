@@ -15,13 +15,22 @@
 size_t			ft_42sh_cm_test_three_err_unk(register t_main_42sh *array,
 register unsigned char *eq)
 {
-	ft_42sh_dsp_err_msg_add_n(array, MSG_TEST_UNK_COND_42SH, (void *)eq, 0);
+	ft_42sh_dsp_err_msg_add_n(array,
+	WAR_42SH""MSG_TEST_UNK_COND_TXT_42SH""PRTF_RESET, (void *)eq, 0);
 	array->env.exit_status->number = STATUS_TEST_ERR_42SH;
 	return (STATUS_REZERVED_42SH);
 }
 
+size_t			ft_42sh_cm_test_three_err_unk_not(register t_main_42sh *array,
+register unsigned char *eq)
+{
+	ft_42sh_dsp_err_msg_add_n(array,
+	WAR_42SH""MSG_TEST_COND_TXT_42SH""PRTF_RESET, (void *)eq, 0);
+	return (STATUS_REZERVED_42SH);
+}
+
 size_t			ft_42sh_cm_test_three_number(register t_main_42sh *array,
-register unsigned char *lp_number,register t_test_number_42sh *out)
+register unsigned char *lp_number, register t_test_number_42sh *out)
 {
 	unsigned char					*lp_save;
 	register unsigned char			litter;
@@ -40,9 +49,11 @@ register unsigned char *lp_number,register t_test_number_42sh *out)
 		lp_number++;
 	if (litter != 0)
 	{
-		ft_42sh_dsp_err_msg_add_n(array, MSG_TEST_INT_42SH, (void *)lp_save, 0);
+		ft_42sh_dsp_err_msg_add_n(array,
+		WAR_42SH""MSG_TEST_INT_TXT_42SH""PRTF_RESET, (void *)lp_save, 0);
 		array->env.exit_status->number = STATUS_TEST_ERR_42SH;
 		return (0);
 	}
+	out->n = (void *)lp_number - out->lp;
 	return (1);
 }

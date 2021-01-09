@@ -44,8 +44,8 @@ void				ft_42sh_signal_winch(int signo)
 	array->b_signo = 1;
 	out = &array->out;
 	list = array->in.in_current;
-	if (ioctl(array->fd, TIOCGWINSZ, &array->ws) == -1)
-		ft_42sh_exit(E_IOTL_CODE_42SH);
+	if (ft_42sh_stub_ioctl(array, TIOCGWINSZ, &array->ws) == -1)
+		ft_42sh_exit(E_IOTL_CODE_42SH, __FILE__, __func__, __LINE__);
 	if (array->lp_auto->b_view != 0)
 		fn_auto_view(array, list, out);
 	ft_write_buffer(out);

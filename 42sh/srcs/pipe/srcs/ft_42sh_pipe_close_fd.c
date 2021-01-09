@@ -25,8 +25,8 @@ void		ft_42sh_pipe_close_fd(register t_jobs_42sh *jobs)
 		close(STDOUT_FILENO);
 	if ((tempos & (1 << STDERR_FILENO)) != 0)
 		close(STDERR_FILENO);
-	fd = PIPE_MAX_STANDART_FD_42SH + 1;
-	count = count >> (PIPE_MAX_STANDART_FD_42SH + 1);
+	fd = FD_MAX_STANDART_42SH + 1;
+	count = count >> (FD_MAX_STANDART_42SH + 1);
 	while (count != 0)
 	{
 		if ((count & 0x1) == 0)
@@ -34,9 +34,9 @@ void		ft_42sh_pipe_close_fd(register t_jobs_42sh *jobs)
 		count = count >> 1;
 		fd++;
 	}
-	if (fd <= PIPE_MAX_STANDART_FD_42SH)
-		fd = PIPE_MAX_STANDART_FD_42SH + 1;
-	while (fd <= PIPE_MAX_SUPPORT_FD_42SH)
+	if (fd <= FD_MAX_STANDART_42SH)
+		fd = FD_MAX_STANDART_42SH + 1;
+	while (fd <= FD_MAX_SUPPORT_42SH)
 		close(fd++);
 }
 
@@ -54,17 +54,25 @@ static void	fn_close_pipe(register int *fds, register size_t count)
 	}
 }
 
-static void	fn_pre(register t_jobs_42sh *jobs)
+static void	fn_pre(register t_main_42sh *array,
+register t_jobs_42sh *jobs)
 {
 	register size_t				fd;
 
+	if ((array->b_mode & MODE_SIGCHILD_42SH) != 0)
+	{
+		close(array->pr.even_fds[PIPE_READ_42SH]);
+		close(array->pr.even_fds[PIPE_WRITE_42SH]);
+	}
+	close(FD_TERMINAL_42SH);
 	fd = 0;
-	while (fd <= PIPE_MAX_SUPPORT_FD_42SH)
+	while (fd <= FD_MAX_SUPPORT_42SH)
 		close(fd++);
 	ft_42sh_jobs_fd_close_future(jobs);
 }
 
-void		ft_42sh_pipe_close_fd_left(register t_jobs_42sh *jobs)
+void		ft_42sh_pipe_close_fd_left(register t_main_42sh *array,
+register t_jobs_42sh *jobs)
 {
 	register t_pipe_42sh		*pipe;
 	register t_pipe_42sh		*pipe_end;
@@ -72,7 +80,7 @@ void		ft_42sh_pipe_close_fd_left(register t_jobs_42sh *jobs)
 	register int				*fds;
 	register size_t				fd;
 
-	fn_pre(jobs);
+	fn_pre(array, jobs);
 	pipe = &jobs->pipe[0];
 	pipe_end = &(jobs->pipe[jobs->n]);
 	fds = &jobs->fds[0];
@@ -91,30 +99,31 @@ void		ft_42sh_pipe_close_fd_left(register t_jobs_42sh *jobs)
 	fn_close_pipe(fds, jobs->b_fd_right | jobs->b_fd_left);
 }
 
-void		ft_42sh_pipe_close_fd_right(register t_jobs_42sh *jobs)
+void		ft_42sh_pipe_close_fd_right(register t_main_42sh *array,
+register t_jobs_42sh *jobs)
 {
 	register t_pipe_42sh		*pipe;
 	register t_pipe_42sh		*pipe_end;
 	register int				*fds;
 	register size_t				b_flag;
+	register size_t				fd;
 
-	fn_pre(jobs);
+	fn_pre(array, jobs);
 	pipe = &jobs->pipe[0];
 	pipe_end = &(jobs->pipe[jobs->n]);
+	fds = &jobs->fds[0];
 	while (pipe < pipe_end)
 	{
 		if (((b_flag = pipe->b_flag) & PIPE_LEFT_42SH) != 0 &&
 		(b_flag & (PIPE_LEFT2_42SH ^ PIPE_LEFT_42SH)) == 0)
 			close(pipe->fd_2);
+		else if ((b_flag & PIPE_RIGHT_42SH) != 0 &&
+		(jobs->b_fd_right & (1 << (fd = pipe->fd_1))) != 0)
+		{
+			close(fds[(fd << 1) + PIPE_WRITE_42SH]);
+			jobs->b_fd_right ^= (1 << fd);
+		}
 		pipe++;
 	}
-	fn_close_pipe((fds = &jobs->fds[0]), jobs->b_fd_left);
-	b_flag = jobs->b_fd_right;
-	while (b_flag != 0)
-	{
-		if ((b_flag & 0x1) != 0)
-			close(fds[PIPE_WRITE_42SH]);
-		b_flag = b_flag >> 1;
-		fds += 2;
-	}
+	fn_close_pipe(fds, jobs->b_fd_right | jobs->b_fd_left);
 }

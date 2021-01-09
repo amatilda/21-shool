@@ -65,7 +65,7 @@ static void			fn_overlow(register t_in_42sh *list, register size_t count)
 	{
 		list->max = tempos;
 		if ((new = ft_malloc(tempos)) == 0)
-			ft_42sh_exit(E_MEM_CODE_42SH);
+			ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 		old = list->lp_b;
 		ft_memcpy(new, old, list->count);
 		list->lp_b = new;

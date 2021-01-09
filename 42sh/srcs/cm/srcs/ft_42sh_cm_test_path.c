@@ -131,19 +131,22 @@ register char **lp_arg, register unsigned char *str,
 register unsigned char litter)
 {
 	struct stat					st;
+	int							(*f)(const char *, struct stat *);
 
 	if (litter == 'b' || litter == 'c' || litter == 'd' || litter == 'e' ||
 	litter == 'f' || litter == 'g' || litter == 'h' || litter == 'k' ||
 	litter == 'L' || litter == 'p' || litter == 'r' || litter == 'S' ||
 	litter == 's' || litter == 'u' || litter == 'W' || litter == 'x' ||
-	litter == 'O' || litter == 'G')
+	litter == 'O' || litter == 'G' || litter == 'w')
 	{
 		if (lp_arg[0] != 0)
 		{
-			ft_42sh_dsp_err_msg(array, MSG_TEST_TOO_ARG_42SH);
+			ft_42sh_dsp_err_msg(array,
+			WAR_42SH""MSG_TEST_TOO_ARG_TXT_42SH""PRTF_RESET);
 			return (STATUS_REZERVED_42SH);
 		}
-		if (str[0] != 0 && stat((void *)str, &st) == 0)
+		f = (litter == 'L' || litter == 'h') ? lstat : stat;
+		if (str[0] != 0 && f((void *)str, &st) == 0)
 			return (fn_test(&st, litter));
 		else
 			return (STATUS_FALTURE_42SH);

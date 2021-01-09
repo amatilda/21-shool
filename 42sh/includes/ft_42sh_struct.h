@@ -45,7 +45,7 @@ typedef struct				s_all_cmd_42sh
 	void					*path_hash;
 	size_t					count_cmd;
 	uint_fast8_t			b_type;
-	char					key[];
+	char					key[1];
 }							t_all_cmd_42sh;
 
 typedef struct				s_env_42sh
@@ -56,7 +56,7 @@ typedef struct				s_env_42sh
 	size_t					value_litter;
 	uint_fast8_t			b_type;
 	size_t					number;
-	char					key[];
+	char					key[1];
 }							t_env_42sh;
 
 typedef struct				s_slesh_42sh
@@ -100,6 +100,8 @@ typedef struct				s_msg_42sh
 	char					*pre_msg;
 	char					*pre_msg_sp;
 	uint_fast8_t			pre_msg_litter;
+	char					*hrdc;
+	size_t					hrdc_lit;
 }							t_msg_42sh;
 
 typedef struct				s_env_main_42sh
@@ -108,6 +110,8 @@ typedef struct				s_env_main_42sh
 	size_t					count_env;
 	size_t					count_local;
 	t_env_42sh				*exit_status;
+	t_env_42sh				*shell_pid;
+	t_env_42sh				*last_pid;
 	unsigned char			*lp_end_exp;
 	size_t					n_exp;
 	size_t					b_exp_err;
@@ -129,16 +133,23 @@ typedef struct				s_pipe_42sh
 	int						fd_1;
 	int						fd_2;
 	void					*lp_heredok_b;
-	t_slesh_42sh			**lp_heredok_spl;
-	t_slesh_42sh			**lp_heredok_spl_end;
+	void					*lp_heredok_e;
+	uint_fast8_t			b_heredok;
 }							t_pipe_42sh;
 
 typedef struct				s_exp_set_42sh
 {
 	size_t					n;
 	struct s_exp_set_42sh	*next;
-	unsigned char			lp[];
+	unsigned char			lp[1];
 }							t_exp_set_42sh;
+
+typedef struct				s_add_exp_42sh
+{
+	void					*value;
+	void					*value_end;
+	uint_fast8_t			b_type;
+}							t_add_exp_42sh;
 
 typedef struct				s_exit_pars_42sh
 {
@@ -148,8 +159,8 @@ typedef struct				s_exit_pars_42sh
 
 typedef struct				s_jobs_42sh
 {
-	int						fds[(PIPE_MAX_SUPPORT_FD_42SH + 1) * 2];
-	pid_t					pipe_pid[PIPE_MAX_SUPPORT_FD_42SH + 1];
+	int						fds[(FD_MAX_SUPPORT_42SH + 1) * 2];
+	pid_t					pipe_pid[FD_MAX_SUPPORT_42SH + 1];
 	size_t					id;
 	size_t					b_pipe_fd;
 	unsigned char			*cmd;
@@ -162,7 +173,6 @@ typedef struct				s_jobs_42sh
 	size_t					b_fd_right;
 	pid_t					pid;
 	pid_t					pid_view;
-	pid_t					pid_grp;
 	size_t					count;
 	void					*path;
 	char					**lp_arg;
@@ -173,7 +183,11 @@ typedef struct				s_jobs_42sh
 	size_t					n;
 	int						fd_pipe;
 	t_exp_set_42sh			*exp_set;
-	t_pipe_42sh				pipe[];
+	t_exp_set_42sh			*exps_set;
+	t_exp_set_42sh			*exps_set_end;
+	size_t					exps_loop;
+	t_exp_set_42sh			*exps_set_tmp;
+	t_pipe_42sh				pipe[1];
 }							t_jobs_42sh;
 
 typedef struct				s_process_42sh
@@ -188,7 +202,9 @@ typedef struct				s_process_42sh
 	t_past_sort_42sh		jb;
 	t_past_sort_42sh		jb_id;
 	pid_t					pid_main;
-	pid_t					even_child;
+	pid_t					pid_fork;
+	pid_t					pid_not_fork;
+	int						even_fds[1 * 2];
 	pid_t					pid_grup;
 	uint_fast8_t			b_auto_view;
 	size_t					count_runing;
@@ -228,7 +244,7 @@ typedef struct				s_alias_42sh
 	size_t					offset_end;
 	size_t					n;
 	struct s_alias_42sh		*next;
-	unsigned char			restore[];
+	unsigned char			restore[1];
 }							t_alias_42sh;
 
 typedef struct				s_dq_42sh
@@ -237,6 +253,7 @@ typedef struct				s_dq_42sh
 	unsigned char			dquote;
 	void					*hrdoc_cmp_lp;
 	size_t					hrdoc_cmp_count;
+	uint8_t					b_hrdoc;
 	void					*hrdoc_next_lp;
 	size_t					hrdoc_next_slesh;
 	void					*hrdoc_start_lp;
@@ -247,6 +264,7 @@ typedef struct				s_dq_42sh
 
 typedef struct				s_sh_42sh
 {
+	char					**lp_arg;
 	unsigned char			*path;
 	size_t					count_path;
 	unsigned char			*lp_sh;
@@ -254,9 +272,46 @@ typedef struct				s_sh_42sh
 	unsigned char			*lp_cmd;
 }							t_sh_42sh;
 
+typedef struct				s_logins_42sh
+{
+	t_std_key_42sh			std;
+	unsigned char			*home_dir;
+	size_t					home_dir_count;
+}							t_logins_42sh;
+
+typedef struct				s_home_42sh
+{
+	char					*lp_home;
+	size_t					count_home;
+	void					*lp_home_tmp_b;
+	void					*lp_home_tmp_e;
+	t_logins_42sh			*list;
+}							t_home_42sh;
+
+typedef struct				s_task_main
+{
+	void					*path_file;
+	void					*task_list;
+}							t_task_main;
+
+typedef struct				s_glb_list
+{
+	struct s_glb_list		*prev;
+	struct s_glb_list		*next;
+	char					name[1];
+}							t_glb_list;
+
+typedef struct				s_glb_main
+{
+	t_glb_list				*first;
+	t_glb_list				*last;
+}							t_glb_main;
+
 typedef struct				s_main_42sh
 {
 	t_pguitar_42sh			pguitar;
+	void					*draynor;
+	t_task_main				task;
 	t_dq_42sh				dq;
 	t_process_42sh			pr;
 	t_in_main_42sh			in;
@@ -266,18 +321,15 @@ typedef struct				s_main_42sh
 	t_auto_42sh				auto_file;
 	t_auto_42sh				auto_env;
 	t_select_42sh			slc;
-	t_sh_42sh				sh;
 	t_pwd_42sh				pwd;
+	t_home_42sh				home;
 	struct winsize			ws;
+	t_sh_42sh				sh;
+	t_past_sort_42sh		login;
+	t_glb_main				glb;
 	struct termios			tty;
 	struct termios			tty_change;
 	t_auto_42sh				*lp_auto;
-	pid_t					b_rep;
-	char					*lp_home;
-	size_t					count_home;
-	void					*lp_home_tmp;
-	size_t					count_home_tmp;
-	void					*lp_home_tmp_next;
 	char					**lp_spl_path;
 	uintmax_t				litter_save[1];
 	uintmax_t				litter[BUFFER_LITTER_42SH];
@@ -287,11 +339,11 @@ typedef struct				s_main_42sh
 	uint_fast8_t			b_quest_exit;
 	uint_fast8_t			b_location;
 	int						b_tty_out_in;
-	int						fd;
 	size_t					count_tty_out_in;
 	t_write_buff			out;
 	t_write_buff			err;
 	size_t					b_fd_close;
+	uint_fast8_t			b_mode;
 	char					buff_err[BUFFER_ERR_42SH];
 	char					buff_out[BUFFER_OUT_42SH];
 	uint32_t				lp_crc32_mirror[CRC32_DEPTH_42SH * 0x100];
@@ -305,13 +357,6 @@ typedef struct				s_add_litter_42sh
 	size_t					count_litter;
 	uint_fast8_t			correction;
 }							t_add_litter_42sh;
-
-typedef struct				s_add_exp_42sh
-{
-	void					*value;
-	void					*value_end;
-	uint_fast8_t			b_type;
-}							t_add_exp_42sh;
 
 typedef struct				s_replase_in_pars_42sh
 {
@@ -328,12 +373,18 @@ typedef struct				s_replase_in_exp_42sh
 	t_env_42sh				*env;
 }							t_replase_in_exp_42sh;
 
+typedef struct				s_replase_in_hrdc_42sh
+{
+	uint_fast8_t			b_test;
+}							t_replase_in_hrdc_42sh;
+
 typedef struct				s_replase_in_42sh
 {
 	t_main_42sh				*array;
 	size_t					b_mode;
 	t_replase_in_pars_42sh	prs;
 	t_replase_in_exp_42sh	exp;
+	t_replase_in_hrdc_42sh	hrdc;
 }							t_replase_in_42sh;
 
 typedef struct				s_overlow_byte_in_42sh

@@ -46,7 +46,6 @@ register t_jobs_42sh *out, register size_t count)
 {
 	register t_jobs_42sh				*jobs;
 	register size_t						tempos;
-	
 
 	if ((out->count = count) != 1)
 		return ;

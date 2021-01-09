@@ -17,11 +17,13 @@ register unsigned char *str)
 {
 	if (str[0] == '-' && str[1] != 0)
 	{
-		ft_42sh_dsp_err_msg_add_n(array, MSG_TEST_UNK_COND_42SH, (void *)str, 0);
+		ft_42sh_dsp_err_msg_add_n(array,
+		WAR_42SH""MSG_TEST_UNK_COND_TXT_42SH""PRTF_RESET, (void *)str, 0);
 		array->env.exit_status->number = STATUS_TEST_ERR_42SH;
 		return ;
 	}
-	ft_42sh_dsp_err_msg_add_n(array, MSG_TEST_COND_42SH, (void *)str, 0);
+	ft_42sh_dsp_err_msg_add_n(array,
+	WAR_42SH""MSG_TEST_COND_TXT_42SH""PRTF_RESET, (void *)str, 0);
 	return ;
 }
 

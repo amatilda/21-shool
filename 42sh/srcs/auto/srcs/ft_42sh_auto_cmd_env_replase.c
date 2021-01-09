@@ -37,6 +37,13 @@ static size_t	fn_ret(register unsigned char *dest, size_t n)
 	return (n);
 }
 
+static void		*fn_set(register unsigned char *dest, unsigned char **end,
+register size_t count)
+{
+	*end = dest + count;
+	return (dest);
+}
+
 static size_t	fn_test(register t_main_42sh *array, register t_in_42sh *list,
 register unsigned char *b, register unsigned char *e)
 {
@@ -49,11 +56,10 @@ register unsigned char *b, register unsigned char *e)
 	{
 		count = array->env.n_exp;
 		if ((dest = ft_malloc(count)) == 0)
-			ft_42sh_exit(E_MEM_CODE_42SH);
+			ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 		tmp = b;
 		ft_42sh_auto_cmd_env_close_while(dest, &tmp, e);
-		end = dest + count;
-		tmp = dest;
+		tmp = fn_set(dest, &end, count);
 		if (ft_42sh_dq_test_sintax(array, &tmp, end) != 0)
 			return (fn_ret(dest, 0));
 		end = tmp;
@@ -65,7 +71,7 @@ register unsigned char *b, register unsigned char *e)
 		ft_free(tmp);
 		return (fn_ret(dest, 1));
 	}
-	return (fn_finish (array, list, b, e));
+	return (fn_finish(array, list, b, e));
 }
 
 size_t			ft_42sh_auto_cmd_env_replase(register t_main_42sh *array,
@@ -79,7 +85,8 @@ register t_in_42sh *list, register unsigned char *b)
 	b_location = array->b_location;
 	array->b_location = LOCATION_STANDART_42SH | LOCATION_NOT_DSP_ERR_42SH
 	| LOCATION_NOT_SET_42SH;
-	tempos = fn_test(array, list, b - array->env.offset_auto, array->env.lp_end_exp);
+	tempos = fn_test(array, list, b - array->env.offset_auto,
+	array->env.lp_end_exp);
 	array->b_location = b_location;
 	return (tempos);
 }

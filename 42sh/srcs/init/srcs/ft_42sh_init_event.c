@@ -14,18 +14,8 @@
 
 void		ft_42sh_init_event(register t_main_42sh *array)
 {
-	register pid_t				pid;
-
-	if ((pid = fork()) == 0)
-	{
-		while (0xFF)
-			;
-	}
-	else if (pid < 0)
-	{
-		write(STDERR_FILENO, MSG_FOOR_42SH, LEN_(MSG_FOOR_42SH));
-		exit(E_FOOR_CODE_42SH);
-	}
-	kill(pid, SIGSTOP);
-	array->pr.even_child = pid;
+	if ((array->b_mode & MODE_SIGCHILD_42SH) == 0)
+		return ;
+	if (pipe(&array->pr.even_fds[0]) != 0)
+		ft_42sh_exit(E_PIPE_CODE_42SH, __FILE__, __func__, __LINE__);
 }

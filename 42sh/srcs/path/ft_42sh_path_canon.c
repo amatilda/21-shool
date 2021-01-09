@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_42sh.h"
+#include "includes/ft_42sh_path.h"
 
 static unsigned char	*fn_back(register unsigned char *current)
 {
@@ -46,7 +46,7 @@ register unsigned char *current)
 		}
 		while (str < end && (litter = str++[0]) != '/')
 			current++[0] = litter;
-		if (current[-1] != '/')
+		if (out != current && current[-1] != '/')
 			current++[0] = '/';
 	}
 	return (current);
@@ -70,7 +70,7 @@ register unsigned char *str, register size_t n)
 
 	ret->max_len = n + 1;
 	if ((out = ft_malloc(n + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	if (str[0] == '/')
 	{
 		str++;

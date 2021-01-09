@@ -24,8 +24,6 @@ void			ft_42sh_alias_un(register t_main_42sh *array,
 void			ft_42sh_alias_file(register t_main_42sh *array);
 void			ft_42sh_alias_read_file(register t_main_42sh *array, int fd);
 void			ft_42sh_alias_pars_home(register t_main_42sh *array);
-
-size_t			ft_42sh_arith_test(register t_main_42sh *array,
-unsigned char **src, register unsigned char *e);
+void			ft_42sh_alias_free(register t_main_42sh *array);
 
 #endif

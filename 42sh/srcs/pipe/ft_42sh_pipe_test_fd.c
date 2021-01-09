@@ -15,7 +15,7 @@
 size_t			ft_42sh_pipe_test_fd(register t_main_42sh *array,
 register int fd)
 {
-	if (fd > PIPE_MAX_SUPPORT_FD_42SH)
+	if (fd > FD_MAX_SUPPORT_42SH)
 		return (1);
 	if ((array->b_fd_close & (1 << fd)) == 0)
 		return (0);

@@ -18,7 +18,7 @@ register t_pipe_42sh *pipes)
 	int						fds[2];
 
 	if (pipe(fds) != 0)
-		ft_42sh_exit(E_PIPE_CODE_42SH);
+		ft_42sh_exit(E_PIPE_CODE_42SH, __FILE__, __func__, __LINE__);
 	pipes->b_flag = PIPE_RIGHT_42SH;
 	pipes->fd_1 = STDOUT_FILENO;
 	pipes->fd_2 = fds[PIPE_WRITE_42SH];
@@ -34,7 +34,7 @@ register t_jobs_42sh *last, register t_pipe_42sh *pipes)
 	int						fds[2];
 
 	if (pipe(fds) != 0)
-		ft_42sh_exit(E_PIPE_CODE_42SH);
+		ft_42sh_exit(E_PIPE_CODE_42SH, __FILE__, __func__, __LINE__);
 	pipes->b_flag = PIPE_LEFT_42SH;
 	pipes->fd_1 = STDIN_FILENO;
 	pipes->fd_2 = last->fd_pipe;

@@ -23,7 +23,16 @@ unsigned char **out, unsigned char *b, register unsigned char litter)
 	return (dest);
 }
 
-void		*ft_42sh_auto_cmd_env_close_while_exp(register
+static void		*fn_set(register
+unsigned char *dest, unsigned char **b, register unsigned char litter)
+{
+	dest++[0] = litter;
+	dest++[0] = (*b)[0];
+	*b = *b + 2;
+	return (dest);
+}
+
+void			*ft_42sh_auto_cmd_env_close_while_exp(register
 unsigned char *dest, unsigned char **out, register unsigned char *e)
 {
 	register unsigned char			litter;
@@ -36,11 +45,7 @@ unsigned char *dest, unsigned char **out, register unsigned char *e)
 	while (b < e && (litter = b[0]) != '}')
 	{
 		if (litter == '\\')
-		{
-			dest++[0] = litter;
-			dest++[0] = b[0];
-			b += 2;
-		}
+			fn_set(dest, &b, litter);
 		else if (litter == '$' && b + 1 < e && b[1] == '{')
 			dest = ft_42sh_auto_cmd_env_close_while_exp(dest, &b, e);
 		else if (litter == '\'')
@@ -56,7 +61,7 @@ unsigned char *dest, unsigned char **out, register unsigned char *e)
 	return (fn_finish(dest, out, b, litter));
 }
 
-void		*ft_42sh_auto_cmd_env_close_while(register
+void			*ft_42sh_auto_cmd_env_close_while(register
 unsigned char *dest, unsigned char **out, register unsigned char *e)
 {
 	register unsigned char			litter;

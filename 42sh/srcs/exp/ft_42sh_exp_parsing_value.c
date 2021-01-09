@@ -59,7 +59,7 @@ register t_env_42sh *list, register unsigned char *dest, register size_t b_mode)
 	else
 	{
 		ft_memcpy(dest, buff,
-		(tempos = ft_itoa(buff, list->number, 10, ITOA_LOWER)));
+		(tempos = ft_itoa(buff, list->number, 10, ITOA_LOWER | ITOA_SIGNED)));
 		dest += tempos;
 	}
 	return (dest);
@@ -69,7 +69,7 @@ register t_env_42sh *list, register unsigned char *dest, register size_t b_mode)
 size_t			ft_42sh_exp_parsing_value_count(register t_main_42sh *array,
 register t_env_42sh *list, register size_t b_mode)
 {
-	register size_t				tempos;
+	char						buff[sizeof(list->number) * 8];
 	register size_t				count;
 
 	if ((list->b_type & EXP_TYPE_NUMBER_42SH) == 0)
@@ -80,13 +80,6 @@ register t_env_42sh *list, register size_t b_mode)
 		else
 			return (count);
 	}
-	tempos = list->number;
-	count = 1;
-	while (tempos > 9)
-	{
-		tempos = tempos / 10;
-		count++;
-	}
-	return (count);
+	return (ft_itoa(buff, list->number, 10, ITOA_LOWER | ITOA_SIGNED));
 	(void)array;
 }

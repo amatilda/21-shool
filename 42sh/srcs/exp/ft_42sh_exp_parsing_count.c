@@ -21,15 +21,20 @@ unsigned char **s, unsigned char **src, register unsigned char *end)
 	register t_env_42sh				*list;
 
 	b = *src;
-	tmp = ft_42sh_exp_name(b, end);
-	tempos = tmp - b;
+	tmp = ft_42sh_exp_name_special(b, end);
+	if ((tempos = tmp - b) == 0)
+	{
+		if (tmp == end || (tmp[0] != '\'' && tmp[0] != '"'))
+			return (1);
+		*s = tmp;
+		return (0);
+	}
 	*src = tmp;
-	if (tempos != 0 && (list = ft_42sh_list_find_key(&in->array->env.root,
+	if ((list = ft_42sh_list_find_key(&in->array->env.root,
 	(void *)b, tempos)) != 0 &&
 	(tempos = ft_42sh_exp_parsing_value_count(in->array,
 	list, in->b_mode)) != 0)
 		return (tempos);
-	*src = ft_42sh_parsing_sp(tmp, end);
 	*s = *src;
 	return (0);
 }
@@ -59,15 +64,11 @@ register unsigned char *end)
 	b = *src;
 	if ((litter = fn_shield(in, src, b, end)) != 0)
 		return (litter);
+	if (b + 1 < end && b[0] == '(' && b[1] == '(')
+		return (ft_42sh_calc_count(in, s, src, end));
 	if (b == end || in->array->env.root.first == 0)
 		return (1);
 	if ((litter = b[0]) == '{')
 		return (ft_42sh_exp_pars_exp_count(in, s, src, end));
-	if (litter == '?')
-	{
-		*src = b + 1;
-		return (ft_42sh_exp_parsing_value_count(in->array,
-		in->array->env.exit_status, in->b_mode));
-	}
 	return (fn_finish_count(in, s, src, end));
 }

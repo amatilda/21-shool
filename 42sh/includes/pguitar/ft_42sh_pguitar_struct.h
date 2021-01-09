@@ -22,7 +22,9 @@ typedef struct					s_pguitar_comp_42sh
 	char						*str_dup;
 	char						*dollar;
 	char						*cur_dol;
+	char						*read_dir;
 	size_t						del;
+	size_t						count_read;
 	char						*caret;
 	size_t						figure;
 	size_t						type_q;
@@ -31,7 +33,9 @@ typedef struct					s_pguitar_comp_42sh
 	size_t						count_cur_litter;
 	size_t						count_dirr;
 	size_t						count_d;
+	size_t						dir_dol;
 	size_t						*root;
+	size_t						slash;
 }								t_pguitar_comp_42sh;
 
 typedef struct					s_pguitar_alias_42sh
@@ -44,7 +48,7 @@ typedef struct					s_pguitar_alias_42sh
 	size_t						v_quote;
 	size_t						new_line;
 	struct s_pguitar_alias_42sh	*next;
-	char						lp[];
+	char						lp[1];
 }								t_pguitar_alias_42sh;
 
 typedef struct					s_pguitar_alias_file_42sh
@@ -52,7 +56,7 @@ typedef struct					s_pguitar_alias_file_42sh
 	size_t						crc32;
 	size_t						offset_alias;
 	size_t						size_alias;
-	char						lp[];
+	char						lp[1];
 }								t_pguitar_alias_file_42sh;
 
 typedef struct					s_pguitar_alias_modif_42sh
@@ -70,7 +74,6 @@ typedef struct					s_pguitar_42sh
 	t_pguitar_comp_42sh			comp;
 	t_pguitar_alias_modif_42sh	f_modif;
 	t_pguitar_alias_42sh		*list;
-
 }								t_pguitar_42sh;
 
 #endif

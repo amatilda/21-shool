@@ -30,5 +30,6 @@ void			ft_42sh_sh_exit(register t_main_42sh *array,
 register size_t exit_code)
 {
 	ft_write_buffer(&array->err);
+	ft_strsplit_free(array->sh.lp_arg);
 	ft_42sh_cm_exit_fun(array, exit_code);
 }

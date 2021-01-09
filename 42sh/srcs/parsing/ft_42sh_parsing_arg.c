@@ -22,6 +22,7 @@ unsigned char *b, register unsigned char *e)
 	count = 0;
 	in.array = array;
 	in.b_mode = PARSING_MODE_ARG_42SH;
+	b = ft_42sh_parsing_sp(b, e);
 	while (ft_42sh_parsing_litter_e_f(b, e) != 0)
 	{
 		if (ft_42sh_pipe_next(array, &b, e) != 0)
@@ -37,22 +38,24 @@ unsigned char *b, register unsigned char *e)
 static char			**fn_set_arg(register t_main_42sh *array,
 register char **lp_arg, unsigned char **out, register unsigned char *end)
 {
-	unsigned char			*b;
+	unsigned char			*start;
 	register unsigned char	*tmp;
+	register unsigned char	*save;
 	register size_t			count;
 	t_replase_in_42sh		in;
 
 	in.array = array;
 	in.b_mode = PARSING_MODE_ARG_42SH;
-	b = *out;
-	count = ft_42sh_replase_count(&in, &b, out, end);
-	if (b == *out)
+	start = *out;
+	save = start;
+	count = ft_42sh_replase_count(&in, &start, out, end);
+	if (start == *out)
 		return (lp_arg);
 	if ((tmp = ft_malloc(count + 1)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	lp_arg++[0] = (char *)tmp;
 	tmp[count] = 0;
-	ft_42sh_replase(&in, tmp, b, end);
+	ft_42sh_replase(&in, tmp, save, end);
 	return (lp_arg);
 }
 
@@ -75,7 +78,6 @@ register char **lp_arg, unsigned char **out, register unsigned char *end)
 static void			fn_finish(register t_main_42sh *array,
 register char **lp_arg, unsigned char **out, register unsigned char *end)
 {
-
 	while (ft_42sh_parsing_litter_e_f(*out, end) != 0)
 	{
 		if (ft_42sh_pipe_next(array, out, end) != 0)
@@ -98,9 +100,10 @@ register t_jobs_42sh *jobs, unsigned char **out, register unsigned char *end)
 		return ;
 	}
 	if ((lp_arg = ft_malloc(sizeof(char *) * (count + 1 + 1))) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	lp_arg[0] = (void *)jobs->lp_arg;
 	jobs->lp_arg = lp_arg++;
 	lp_arg[count] = 0;
 	fn_finish(array, fn_pre(array, lp_arg, out, end), out, end);
+	jobs->lp_arg = ft_42sh_glb_args_parser(array, jobs->lp_arg, count + 1);
 }

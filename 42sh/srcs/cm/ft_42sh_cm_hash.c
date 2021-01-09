@@ -35,17 +35,6 @@ register t_all_cmd_42sh *spl)
 	ft_write_buffer_str_zero(out, "\n");
 }
 
-static void			fn_reset(register t_main_42sh *array,
-register char **lp_arg)
-{
-	if (lp_arg[0] != 0)
-		return (ft_42sh_dsp_err_msg(array, MSG_HASH_TOO_ARG_42SH));
-	if (array->lp_auto->all_cmd.first != 0)
-		ft_42sh_auto_free_all_cmd(array);
-	ft_42sh_auto_create(array);
-	array->b_hash = HASH_NOT_42SH;
-}
-
 static void			fn_only_hash(register t_write_buff *out,
 register t_all_cmd_42sh **spl_pak)
 {
@@ -65,14 +54,12 @@ static void			fn_all(register t_main_42sh *array)
 	register t_all_cmd_42sh			**spl_pak;
 	register t_all_cmd_42sh			*spl;
 	register size_t					b_hash;
-	register t_write_buff			*out;
 
 	if ((b_hash = array->b_hash) == HASH_NOT_42SH)
 		return ;
 	if (ft_42sh_pipe_test_fd_dsp(array, STDOUT_FILENO, MSG_HASH_42SH) == 0)
 		return ;
 	spl_pak = array->lp_auto->spl_all_cmd;
-	out = &array->out;
 	if ((b_hash = array->b_hash) == HASH_ALL_42SH)
 	{
 		while ((spl = spl_pak[0]) != 0 && (spl->b_type & AUTO_TYPE_HASH_42SH)
@@ -80,14 +67,14 @@ static void			fn_all(register t_main_42sh *array)
 			spl_pak++;
 		if (spl == 0)
 			return ;
-		ft_write_buffer_str_zero(out, MSG_HASH_PRE_42SH);
+		ft_write_buffer_str_zero(&array->out, MSG_HASH_PRE_42SH);
 		while ((spl = spl_pak++[0]) != 0)
-			if (((((spl->b_type & AUTO_TYPE_EXE_42SH) != 0 && spl->count_cmd != 0) ||
-			(spl->b_type & AUTO_TYPE_HASH_42SH) != 0)))
-				fn_view(out, spl);
+			if (((((spl->b_type & AUTO_TYPE_EXE_42SH) != 0 && spl->count_cmd
+			!= 0) || (spl->b_type & AUTO_TYPE_HASH_42SH) != 0)))
+				fn_view(&array->out, spl);
 		return ;
 	}
-	fn_only_hash(out, spl_pak);
+	fn_only_hash(&array->out, spl_pak);
 }
 
 void				ft_42sh_cm_hash(register t_main_42sh *array,
@@ -106,11 +93,12 @@ register char **lp_arg)
 		while ((litter = str++[0]) != 0 && litter == 'r')
 			b_view = 'r';
 		if (litter != 0)
-			return (ft_42sh_dsp_err_msg_add_n(array, MSG_BAD_OPTION_42SH,
-			(void *)str - 1, ft_strlen_utf8_litter(str[-1])));
+			return (ft_42sh_dsp_err_msg_add_n(array,
+			WAR_PR_42SH""MSG_BAD_OPTION_TXT_42SH""PRTF_RESET"-",
+			(void *)str - 1, ft_strlen_utf8_litter(str - 1)));
 	}
 	if (b_view != 0)
-		return (fn_reset(array, lp_arg));
+		return (ft_42sh_cm_hash_reset(array, lp_arg));
 	if (lp_arg[0] == 0)
 		return (fn_all(array));
 	ft_42sh_cm_hash_arg(array, lp_arg);

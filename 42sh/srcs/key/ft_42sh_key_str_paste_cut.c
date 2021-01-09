@@ -48,7 +48,7 @@ register t_in_42sh *list, register char *e)
 		ft_free(current);
 	count = e - b;
 	if ((array->slc.lp_clipboard = ft_strndup(b, count)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	array->slc.clipboard_count = count;
 }
 

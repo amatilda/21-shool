@@ -57,4 +57,3 @@ register unsigned char *e, register unsigned char dquote, unsigned char old)
 	*out = b;
 	return (litter);
 }
-

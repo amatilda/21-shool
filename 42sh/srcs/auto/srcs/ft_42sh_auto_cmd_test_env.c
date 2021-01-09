@@ -36,11 +36,13 @@ register t_in_42sh *list, register t_env_42sh *cmd, register size_t n)
 
 	n++;
 	tmp = (void *)(list->lp_current - n);
-	ft_42sh_str_delete(array, list, (void *)tmp, ft_42sh_parsing_litter_n((void *)tmp, (void *)(tmp + n)));
-	if ((n = ft_42sh_exp_parsing_value_count(array, cmd, PARSING_MODE_ARG_42SH)) == 0)
+	ft_42sh_str_delete(array, list, (void *)tmp,
+	ft_42sh_parsing_litter_n((void *)tmp, (void *)(tmp + n)));
+	if ((n = ft_42sh_exp_parsing_value_count(array, cmd,
+	PARSING_MODE_ARG_42SH)) == 0)
 		return ;
 	if ((tmp = ft_malloc(n)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_42sh_exp_parsing_value(array, cmd, tmp, PARSING_MODE_ARG_42SH);
 	start = ft_42sh_str_shield(tmp, tmp + n, SHIELD_EXTERNALLY, &lp);
 	ft_42sh_str_add(array, (void *)start, (void *)start + lp.count, 1);
@@ -48,7 +50,7 @@ register t_in_42sh *list, register t_env_42sh *cmd, register size_t n)
 	ft_free(start);
 }
 
-static size_t	fn_stub(register t_main_42sh *array,
+static size_t			fn_stub(register t_main_42sh *array,
 register t_in_42sh *list, register t_env_42sh *cmd, register size_t n)
 {
 	if (n < cmd->std.key_count)
@@ -67,7 +69,7 @@ register t_in_42sh *list, register t_env_42sh *cmd, register size_t n)
 	return (0);
 }
 
-size_t			ft_42sh_auto_cmd_test_env(register t_main_42sh *array,
+size_t					ft_42sh_auto_cmd_test_env(register t_main_42sh *array,
 register t_in_42sh *list, register t_all_cmd_42sh **spl,
 register t_all_cmd_42sh **spl_end)
 {
@@ -80,10 +82,10 @@ register t_all_cmd_42sh **spl_end)
 	cmd = (t_env_42sh *)spl[0];
 	if (n != 0)
 	{
-		if (cmd == (t_env_42sh *)spl_end[0] || n == cmd->std.key_count)
+		if (cmd == (t_env_42sh *)spl_end[0] ||
+		(n == cmd->std.key_count && array->lp_auto->b_view == 0))
 			return (fn_stub(array, list, cmd, n));
 	}
-		
 	ft_42sh_auto_cmd_env_close(array, list, n);
 	return (1);
 }

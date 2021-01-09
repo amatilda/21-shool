@@ -19,5 +19,5 @@ register unsigned char *b, register unsigned char *end)
 
 	out = array->pr.jb.last;
 	if ((out->cmd = ft_strndup((void *)b, end - b)) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 }

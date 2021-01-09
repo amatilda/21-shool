@@ -22,7 +22,7 @@ register unsigned char *value_e)
 	{
 		if ((lit = value[0]) < 0x20 || lit == '\'' || lit == '"' ||
 		lit == '$' || lit == '\\' || lit == '[' || lit == ']' ||
-		lit == '*'  || lit == '?')
+		lit == '*' || lit == '?')
 			break ;
 		value++;
 	}

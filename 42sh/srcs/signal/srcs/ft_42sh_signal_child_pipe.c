@@ -36,4 +36,3 @@ register pid_t pid, int stat_loc)
 	}
 	return (1);
 }
-

@@ -14,7 +14,6 @@
 
 static void		fn_while(register char **spl, register t_std_key_42sh *list)
 {
-
 	while (list != 0)
 	{
 		if ((((t_env_42sh *)list)->b_type & EXP_TYPE_EVERIMENT_42SH) != 0)
@@ -30,7 +29,7 @@ char			**ft_42sh_exp_split_env(register t_main_42sh *array)
 
 	count = array->env.count_env;
 	if ((spl = ft_malloc(sizeof(char *) * (count + 1))) == 0)
-		ft_42sh_exit(E_MEM_CODE_42SH);
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	spl[count] = 0;
 	fn_while(spl, array->env.root.first);
 	return (spl);

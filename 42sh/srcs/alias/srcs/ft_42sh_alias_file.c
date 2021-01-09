@@ -12,6 +12,34 @@
 
 #include "../includes/ft_42sh_alias.h"
 
+void			ft_42sh_alias_pars_dsp_write_v(t_main_42sh *array,
+register t_pguitar_alias_42sh *list)
+{
+	size_t	n;
+	char	*str;
+	char	*tmp_str;
+	char	*start;
+
+	n = list->new_line;
+	tmp_str = list->value;
+	str = (char *)malloc(sizeof(char) * list->v_cnt + 1);
+	start = str;
+	while (*tmp_str)
+	{
+		if (*tmp_str == ' ' && *(tmp_str + 1) == '\n' && n > 0)
+		{
+			n--;
+			tmp_str++;
+		}
+		*str = *tmp_str;
+		str++;
+		tmp_str++;
+	}
+	*str = '\0';
+	ft_write_buffer_str_zero(&array->out, start);
+	free(start);
+}
+
 static void		ft_42sh_alias_write_lists(register
 t_pguitar_alias_42sh *list, char **lp_r)
 {
@@ -51,8 +79,8 @@ size_t *i, char **lp_r, register t_main_42sh *array)
 	}
 	else if (!(array->pguitar.list))
 		return (1);
-	if (!(*file = malloc(sizeof(t_pguitar_alias_file_42sh) + *i)))
-		ft_42sh_exit(E_MEM_CODE_42SH);
+	if (!(*file = ft_malloc(sizeof(t_pguitar_alias_file_42sh) + *i)))
+		ft_42sh_exit(E_MEM_CODE_42SH, __FILE__, __func__, __LINE__);
 	ft_memset(*file, 'F', sizeof(t_pguitar_alias_file_42sh) + *i);
 	(*file)->offset_alias = (*file)->lp - (char *)(*file);
 	(*file)->size_alias = *i;
@@ -76,7 +104,7 @@ void			ft_42sh_alias_file(register t_main_42sh *array)
 	if ((fd = open(array->pguitar.f_modif.home, O_CREAT | O_TRUNC | O_RDWR,
 		S_IWUSR | S_IRUSR)) < 0)
 	{
-		free(file);
+		ft_free(file);
 		return (ft_42sh_dsp_err_msg(array,
 			WAR_PR_42SH": could not open file"PRTF_RESET));
 	}
@@ -85,5 +113,5 @@ void			ft_42sh_alias_file(register t_main_42sh *array)
 	+ i) - sizeof(file->crc32), CRC32_START_MIRROR_42SH);
 	write(fd, file, sizeof(t_pguitar_alias_file_42sh) + i);
 	close(fd);
-	free(file);
+	ft_free(file);
 }
